@@ -214,7 +214,7 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
     </div>
 
     <div class="order">
-      <h3>外す順番</h3>
+      <h3>外す順番<span style="font-weight:600;color:var(--muted);font-size:13px;margin-left:8px">右の数字＝手放せる時間</span></h3>
       <ol id="rOrder"></ol>
     </div>
 
@@ -380,7 +380,7 @@ function renderDetail(){
   html += '<div class="sq">月にどれくらいの時間ですか</div><div class="opts" data-k="h">';
   HOURS.forEach((h,k)=>{
     const on = ans[i].h===h[1] ? " on" : "";
-    html += '<div class="opt'+on+'" data-v="'+h[1]+'">'+h[0]+'<span class="tick">✓</span></div>';
+    html += '<div class="opt'+on+'" data-v="'+h[1]+'" data-label="'+h[0]+'">'+h[0]+'<span class="tick">✓</span></div>';
   });
   html += '</div>';
   html += '<div class="sq" id="sq2">これ、他の人でもできそうですか</div><div class="opts" data-k="w">';
@@ -398,6 +398,7 @@ function renderDetail(){
         g.querySelectorAll(".opt").forEach(x=>x.classList.remove("on"));
         o.classList.add("on");
         ans[i][key] = parseFloat(o.dataset.v);
+        if(key==="h") ans[i].hLabel = o.dataset.label;   // 表示は選ばれた言葉をそのまま使う
         renderBar();
         // 時間を選んだら、2問目が画面に入るまで自動で送る（縦に長いので見落とされる）
         if(key==="h" && ans[i].w===undefined){
@@ -424,7 +425,7 @@ let resultText = "";
 function calc(){
   const rows = picked.map(i=>({
     i, name:JOBS[i].n, chain:JOBS[i].chain,
-    h:ans[i].h, w:ans[i].w,
+    h:ans[i].h, hLabel:ans[i].hLabel, w:ans[i].w,
     free: ans[i].h * ans[i].w
   }));
   const total = Math.round(rows.reduce((s,r)=>s+r.free,0));
@@ -435,7 +436,7 @@ function calc(){
 
   const top = rows[0];
   $("#rFirst").textContent = top.name;
-  $("#rFirstWhy").innerHTML = "月" + top.h + "時間かかっていて、" +
+  $("#rFirstWhy").innerHTML = "「" + top.hLabel + "」かかっていて、" +
     (top.w>=1 ? "もう任せられる状態です。" : top.w>=0.6 ? "手順さえあれば任せられます。" : "判断が要るぶん、外しにくい仕事です。") +
     "<br><b>ここを外すと、月およそ" + Math.round(top.free) + "時間が戻ります。</b>";
   $("#rChain").innerHTML = top.chain;
