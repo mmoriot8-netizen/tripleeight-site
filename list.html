@@ -35,7 +35,8 @@ body{
 /* ── 入口 ── */
 .intro{padding:44px 0 24px;text-align:center}
 .brand{font-size:13px;font-weight:800;letter-spacing:.16em;color:var(--main);margin-bottom:26px}
-.intro h1{font-size:27px;font-weight:800;line-height:1.5;letter-spacing:.01em;margin-bottom:8px}
+.intro h1{font-size:25px;font-weight:800;line-height:1.55;letter-spacing:0;margin-bottom:8px}
+@media(max-width:359px){.intro h1{font-size:22px}}
 .intro h1 .em{color:var(--main);border-bottom:5px solid var(--accent);padding-bottom:1px}
 .intro .lead{font-size:15px;color:var(--muted);margin:18px 0 30px}
 .specs{display:flex;gap:8px;justify-content:center;margin-bottom:34px;flex-wrap:wrap}
@@ -155,7 +156,7 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
   <!-- ════════ 0. 入口 ════════ -->
   <section class="intro" id="s-intro">
     <div class="brand">TRIPLEEIGHT</div>
-    <h1>社長にしかできない仕事は、<br><span class="em">本当にどれですか</span></h1>
+    <h1>社長にしかできない仕事、<br><span class="em">本当にどれですか</span></h1>
     <p class="lead">当てはまるものを選ぶだけです。<br>書くところはありません。</p>
 
     <div class="specs">
@@ -313,8 +314,15 @@ JOBS.forEach((j,i)=>{
 function setProg(){
   if(phase==="intro"||phase==="res"){ $("#prog").classList.add("hidden"); return; }
   $("#prog").classList.remove("hidden");
-  const total = 1 + picked.length;
-  const now = phase==="pick" ? 1 : 1 + cursor + 1;
+  if(phase==="pick"){
+    // STEP1は「選ぶ」段階。問数に数えず、進捗は控えめに見せる
+    $("#pnum").textContent = "STEP 1　選ぶ";
+    $("#ppct").textContent = "";
+    $("#pfill").style.width = "8%";
+    return;
+  }
+  const total = picked.length;
+  const now = cursor + 1;
   const pct = Math.round(now/total*100);
   $("#pnum").textContent = now + " / " + total;
   $("#ppct").textContent = pct + "%";
@@ -375,7 +383,7 @@ function renderDetail(){
     html += '<div class="opt'+on+'" data-v="'+h[1]+'">'+h[0]+'<span class="tick">✓</span></div>';
   });
   html += '</div>';
-  html += '<div class="sq">これ、他の人でもできそうですか</div><div class="opts" data-k="w">';
+  html += '<div class="sq" id="sq2">これ、他の人でもできそうですか</div><div class="opts" data-k="w">';
   WHO.forEach(w=>{
     const on = ans[i].w===w[2] ? " on acc" : "";
     html += '<div class="opt acc'+on+'" data-v="'+w[2]+'"><span>'+w[0]+(w[1]?'<small>'+w[1]+'</small>':'')+'</span><span class="tick">✓</span></div>';
@@ -391,6 +399,11 @@ function renderDetail(){
         o.classList.add("on");
         ans[i][key] = parseFloat(o.dataset.v);
         renderBar();
+        // 時間を選んだら、2問目が画面に入るまで自動で送る（縦に長いので見落とされる）
+        if(key==="h" && ans[i].w===undefined){
+          const t = document.getElementById("sq2");
+          if(t) setTimeout(()=>t.scrollIntoView({behavior:"smooth",block:"start"}), 130);
+        }
       };
     });
   });
