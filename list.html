@@ -203,7 +203,7 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
     </div>
 
     <div class="first">
-      <div class="lbl">最初に外す、たった1つ</div>
+      <div class="lbl" id="rFirstLbl">最初に外す、たった1つ</div>
       <div class="nm" id="rFirst">—</div>
       <p id="rFirstWhy"></p>
     </div>
@@ -440,7 +440,9 @@ function calc(){
   const ol = $("#rOrder"); ol.innerHTML = "";
 
   if(movable.length===0){
-    $("#rFirst").textContent = "いまは、ありません";
+    $("#rFirstLbl").textContent = "外す前に、やることがあります";
+    $("#rCap").textContent = "いま外せる仕事は見つかりませんでした。";
+    $("#rFirst").textContent = "判断の基準を、言葉にする";
     $("#rFirstWhy").innerHTML =
       "選ばれた仕事は、すべて<b>「社長がやるしかない（判断が要る）」</b>とお答えになりました。<br>" +
       "この状態では、外す前にやることがあります。<b>判断の基準を、言葉にして残すことです。</b>" +
@@ -458,6 +460,7 @@ function calc(){
   }
 
   const top = movable[0];
+  $("#rFirstLbl").textContent = "最初に外す、たった1つ";
   $("#rFirst").textContent = top.name;
   $("#rFirstWhy").innerHTML = "「" + top.hLabel + "」かかっていて、" +
     (top.w>=1 ? "もう任せられる状態です。" : "手順さえあれば任せられます。") +
