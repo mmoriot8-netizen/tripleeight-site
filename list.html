@@ -1,174 +1,483 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>詰まりリスト｜TripleEight</title>
-<meta name="description" content="社長の手から離せる仕事を、選ぶだけで洗い出します。書く必要はありません。">
-<link rel="stylesheet" href="style.css">
+<meta name="description" content="社長にしかできない仕事はどれか。選ぶだけで、外す順番まで出ます。5分。">
+<style>
+:root{
+  --main:#001743;
+  --accent:#d6aaa7;
+  --bg:#f4f6f9;
+  --card:#fff;
+  --line:#dfe3e8;
+  --text:#1a1d21;
+  --muted:#6c7480;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.75;
+  -webkit-font-smoothing:antialiased;padding-bottom:100px;
+}
+.wrap{max-width:620px;margin:0 auto;padding:0 16px}
+.hidden{display:none!important}
+
+/* ── 進捗バー ── */
+.prog{position:sticky;top:0;z-index:50;background:var(--bg);padding:14px 0 10px;border-bottom:1px solid var(--line)}
+.prog .meta{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:7px}
+.prog .meta em{font-style:normal;color:var(--main)}
+.track{height:6px;background:#e3e7ec;border-radius:99px;overflow:hidden}
+.fill{height:100%;background:var(--main);border-radius:99px;width:0;transition:width .35s ease}
+
+/* ── 入口 ── */
+.intro{padding:44px 0 24px;text-align:center}
+.brand{font-size:13px;font-weight:800;letter-spacing:.16em;color:var(--main);margin-bottom:26px}
+.intro h1{font-size:27px;font-weight:800;line-height:1.5;letter-spacing:.01em;margin-bottom:8px}
+.intro h1 .em{color:var(--main);border-bottom:5px solid var(--accent);padding-bottom:1px}
+.intro .lead{font-size:15px;color:var(--muted);margin:18px 0 30px}
+.specs{display:flex;gap:8px;justify-content:center;margin-bottom:34px;flex-wrap:wrap}
+.spec{background:#fff;border:1px solid var(--line);border-radius:99px;padding:8px 16px;font-size:13px;font-weight:700}
+.spec b{color:var(--main)}
+.knows{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 20px;text-align:left;margin-bottom:12px}
+.knows h2{font-size:14px;font-weight:800;color:var(--muted);letter-spacing:.06em;margin-bottom:14px}
+.knows li{list-style:none;font-size:16px;font-weight:700;padding:9px 0 9px 30px;position:relative}
+.knows li::before{content:"";position:absolute;left:6px;top:19px;width:11px;height:11px;border-radius:50%;background:var(--accent)}
+.note{font-size:13px;color:var(--muted);text-align:left;padding:0 4px}
+
+/* ── ステップ共通 ── */
+.step{padding:26px 0 10px}
+.q{font-size:23px;font-weight:800;line-height:1.5;margin-bottom:6px;letter-spacing:.01em}
+.q .sub{display:block;font-size:14px;font-weight:600;color:var(--muted);margin-top:8px;line-height:1.7}
+.section-label{font-size:12px;font-weight:800;color:var(--accent);letter-spacing:.1em;margin-bottom:10px}
+
+/* ── 選択肢 ── */
+.opts{display:flex;flex-direction:column;gap:8px;margin-top:20px}
+.opt{
+  display:flex;align-items:center;min-height:58px;padding:12px 16px;
+  border:1.5px solid var(--line);border-radius:12px;background:#fff;
+  font-size:16px;font-weight:700;cursor:pointer;transition:.12s;position:relative;
+}
+.opt small{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-top:2px}
+.opt.on{border-color:var(--main);background:var(--main);color:#fff}
+.opt.on small{color:rgba(255,255,255,.72)}
+.opt.on.acc{background:var(--accent);color:var(--main);border-color:var(--accent)}
+.opt.on.acc small{color:rgba(0,23,67,.62)}
+.opt .tick{position:absolute;right:15px;font-size:17px;font-weight:800;opacity:0}
+.opt.on .tick{opacity:1}
+
+/* ── 業務チップ ── */
+.jobs{display:flex;flex-direction:column;gap:7px;margin-top:18px}
+.job{
+  display:flex;align-items:center;min-height:54px;padding:10px 15px;
+  border:1.5px solid var(--line);border-radius:11px;background:#fff;
+  font-size:15.5px;font-weight:700;cursor:pointer;transition:.12s;position:relative;
+}
+.job.on{border-color:var(--main);background:var(--main);color:#fff}
+.job .tick{position:absolute;right:14px;font-size:16px;font-weight:800;opacity:0}
+.job.on .tick{opacity:1}
+.count{margin-top:16px;font-size:14px;font-weight:700;color:var(--muted);text-align:center}
+.count b{color:var(--main);font-size:17px}
+
+/* ── 各業務の設問カード ── */
+.jobcard{background:#fff;border:1.5px solid var(--main);border-radius:14px;padding:20px 18px;margin-top:18px}
+.jobcard .jt{font-size:19px;font-weight:800;color:var(--main);margin-bottom:16px;padding-bottom:14px;border-bottom:1px dashed var(--line)}
+.jobcard .sq{font-size:14.5px;font-weight:800;margin:16px 0 8px}
+.jobcard .sq:first-of-type{margin-top:0}
+
+/* ── 結果 ── */
+.res{padding:20px 0}
+.hero{background:var(--main);color:#fff;border-radius:16px;padding:28px 22px;text-align:center;margin-bottom:14px}
+.hero .lbl{font-size:14px;font-weight:700;opacity:.8}
+.hero .big{font-size:60px;font-weight:800;line-height:1.1;margin:6px 0 2px;letter-spacing:-.02em}
+.hero .big span{font-size:22px;font-weight:800;margin-left:4px}
+.hero .cap{font-size:13px;opacity:.72;margin-top:10px;line-height:1.7}
+
+.first{background:var(--accent);border-radius:16px;padding:24px 22px;margin-bottom:14px}
+.first .lbl{font-size:13px;font-weight:800;color:var(--main);opacity:.8;letter-spacing:.06em}
+.first .nm{font-size:25px;font-weight:800;color:var(--main);line-height:1.4;margin:8px 0 12px}
+.first p{font-size:14.5px;font-weight:600;color:var(--main);line-height:1.8}
+
+.chain{background:#fff;border-left:5px solid var(--main);border-radius:0 12px 12px 0;padding:20px 18px;margin-bottom:14px}
+.chain .lbl{font-size:12px;font-weight:800;color:var(--main);letter-spacing:.08em;margin-bottom:8px}
+.chain .txt{font-size:15.5px;font-weight:700;line-height:1.8}
+
+.order{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 18px;margin-bottom:14px}
+.order h3{font-size:15px;font-weight:800;margin-bottom:14px}
+.order ol{list-style:none;counter-reset:o}
+.order li{counter-increment:o;display:flex;gap:13px;align-items:flex-start;padding:11px 0;border-top:1px solid #eef1f4;font-size:15px;font-weight:700}
+.order li:first-child{border-top:none}
+.order li::before{
+  content:counter(o);flex:0 0 27px;height:27px;border-radius:50%;
+  background:var(--main);color:#fff;font-size:14px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;margin-top:2px;
+}
+.order li .h{margin-left:auto;font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap;padding-left:8px}
+
+details.calc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:0;margin-bottom:14px;overflow:hidden}
+details.calc summary{padding:15px 18px;font-size:14px;font-weight:800;cursor:pointer;list-style:none}
+details.calc summary::-webkit-details-marker{display:none}
+details.calc summary::after{content:"＋";float:right;color:var(--muted)}
+details.calc[open] summary::after{content:"−"}
+details.calc .body{padding:0 18px 18px;font-size:13.5px;color:var(--muted);line-height:1.9}
+details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size:13px;color:var(--main);font-weight:700}
+
+.next{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin-bottom:14px}
+.next h3{font-size:17px;font-weight:800;margin-bottom:10px}
+.next p{font-size:14.5px;line-height:1.85;color:var(--text)}
+.next .strong{font-weight:800;color:var(--main)}
+
+/* ── 下部バー ── */
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+     padding:11px 16px calc(11px + env(safe-area-inset-bottom));z-index:60}
+.bar .inner{max-width:620px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.btn{flex:1;min-height:54px;border:none;border-radius:12px;font-size:16.5px;font-weight:800;
+     font-family:inherit;cursor:pointer;background:var(--main);color:#fff;transition:.12s}
+.btn:disabled{background:#b8bec6;cursor:not-allowed}
+.btn.ghost{flex:0 0 88px;background:#fff;color:var(--muted);border:1.5px solid var(--line);font-size:15px}
+.btn.acc{background:var(--accent);color:var(--main)}
+
+.foot{text-align:center;font-size:12px;color:var(--muted);padding:26px 0 10px;line-height:1.9}
+</style>
 </head>
 <body>
 
-<div class="bar"><div class="wrap">
-  <span class="logo">TripleEight</span>
-  <span class="tag">現場仕事の会社に、<br>時間を作る</span>
-</div></div>
-
-<div class="hero"><div class="wrap">
-  <h1>いま、<span class="em">社長にしかできない仕事</span>を<br>数えてみませんか</h1>
-  <p>書くところはありません。当てはまるものを選ぶだけです。5分で終わります。</p>
+<!-- ════════ 進捗 ════════ -->
+<div class="prog hidden" id="prog"><div class="wrap">
+  <div class="meta"><span id="pnum"></span><em id="ppct"></em></div>
+  <div class="track"><div class="fill" id="pfill"></div></div>
 </div></div>
 
 <div class="wrap">
 
-<section>
-  <div class="note">
-    <b>使い方</b><br>
-    ① 社長ご自身がやっている仕事にチェック<br>
-    ② 月に何時間くらいか、選ぶ<br>
-    ③ 他の人でもできそうか、選ぶ<br>
-    最後に、<b>手放せる時間が出ます。</b>
-  </div>
-</section>
+  <!-- ════════ 0. 入口 ════════ -->
+  <section class="intro" id="s-intro">
+    <div class="brand">TRIPLEEIGHT</div>
+    <h1>社長にしかできない仕事は、<br><span class="em">本当にどれですか</span></h1>
+    <p class="lead">当てはまるものを選ぶだけです。<br>書くところはありません。</p>
 
-<h2>① 社長がやっている仕事を選ぶ</h2>
-<p class="small">少しでも関わっているものは、チェックしてください。全部やっていなくて構いません。</p>
+    <div class="specs">
+      <span class="spec"><b>選ぶだけ</b></span>
+      <span class="spec"><b>5分</b></span>
+      <span class="spec"><b>無料</b>・登録不要</span>
+    </div>
 
-<div id="rows"></div>
+    <div class="knows">
+      <h2>わかること</h2>
+      <ul>
+        <li>いま手放せる時間（月あたり）</li>
+        <li><b>最初に外すべき、たった1つ</b></li>
+        <li><b>それを外すと、次にどこが詰まるか</b></li>
+        <li>2番目・3番目に外すもの</li>
+      </ul>
+    </div>
+    <p class="note">※ 結果はこの画面に出ます。メールアドレスの入力はありません。</p>
+  </section>
 
-<h2>② 結果</h2>
+  <!-- ════════ 1. 業務を選ぶ ════════ -->
+  <section class="step hidden" id="s-pick">
+    <div class="section-label">STEP 1</div>
+    <div class="q">いま、社長ご自身が<br>手を動かしているものは？
+      <span class="sub">いくつでも選べます。月に1回でもやっているなら選んでください。</span>
+    </div>
+    <div class="jobs" id="jobs"></div>
+    <div class="count" id="count">まだ選ばれていません</div>
+  </section>
 
-<div class="result" id="res">
-  <p class="rl">いま、社長が使っている時間</p>
-  <p class="rn" id="total">0<small>時間/月</small></p>
-  <p class="rs">上のリストにチェックを入れると、ここに出ます。</p>
-  <div class="bd" id="bd" style="display:none">
-    <div><span>すぐ手放せる</span><b id="t3">0時間</b></div>
-    <div><span>手順を作れば手放せる</span><b id="t2">0時間</b></div>
-    <div><span>社長がやるしかない</span><b id="t1">0時間</b></div>
-  </div>
+  <!-- ════════ 2. 各業務の詳細（動的） ════════ -->
+  <section class="step hidden" id="s-detail">
+    <div class="section-label" id="dlabel">STEP 2</div>
+    <div class="q">この仕事について、<br>2つだけ教えてください</div>
+    <div id="dcard"></div>
+  </section>
+
+  <!-- ════════ 3. 結果 ════════ -->
+  <section class="res hidden" id="s-res">
+    <div class="hero">
+      <div class="lbl">いま手放せる時間</div>
+      <div class="big" id="rHours">0<span>時間/月</span></div>
+      <div class="cap" id="rCap"></div>
+    </div>
+
+    <div class="first">
+      <div class="lbl">最初に外す、たった1つ</div>
+      <div class="nm" id="rFirst">—</div>
+      <p id="rFirstWhy"></p>
+    </div>
+
+    <div class="chain">
+      <div class="lbl">そのあと、ここが詰まります</div>
+      <div class="txt" id="rChain">—</div>
+    </div>
+
+    <div class="order">
+      <h3>外す順番</h3>
+      <ol id="rOrder"></ol>
+    </div>
+
+    <details class="calc">
+      <summary>この数字の出し方</summary>
+      <div class="body">
+        <p><code>手放せる時間 ＝ 月の時間 × 任せやすさ</code></p>
+        <p>「本当は誰でもできる」＝ 100%、「教えればできる」＝ 60%、「社長がやるしかない」＝ 20% として合計しています。</p>
+        <p><b>外す順番は、時間の多い順ではありません。</b>「よく発生して、かつ任せやすいもの」から並べています。月1回の面倒な作業より、毎日30分の作業を先に外したほうが、空く時間が大きいからです。</p>
+        <p>※ 目安です。実際は業種と体制で変わります。</p>
+      </div>
+    </details>
+
+    <div class="next">
+      <h3>で、それ、誰がやるの？</h3>
+      <p>ここまでで、手放せる仕事は見えました。次に出てくる問いは、いつも同じです。<br><br>
+      人を増やすと、毎月の給与と社会保険がかかります。募集にも時間がかかります。<br>
+      <span class="strong">人を増やす前に、その仕事自体を減らせないか</span>を一緒に考えます。</p>
+    </div>
+  </section>
+
+  <p class="foot">
+    TripleEight（トリプルエイト）<br>
+    時間を、産む。
+  </p>
 </div>
 
-<div class="result red hide" id="res2">
-  <p class="rl">お盆明けから、手放せる時間</p>
-  <p class="rn" id="free">0<small>時間/月</small></p>
-  <p class="rs" id="freemsg"></p>
-</div>
+<!-- ════════ 下部バー ════════ -->
+<div class="bar hidden" id="bar"><div class="inner" id="barIn"></div></div>
 
-<section id="after" class="hide">
-  <h2>③ で、それ誰がやるの？</h2>
-  <p class="lead">ここまでで、手放せる仕事が見えました。<br>
-  次に出てくる問いは、いつも同じです。</p>
-  <div class="note red">
-    <b>「で、それ、誰がやるの？」</b><br>
-    人を増やすと、毎月の給与と社会保険がかかります。募集にも時間がかかります。<br>
-    <b>人を増やす前に、その仕事自体を減らせないか</b>を一緒に考えます。
-  </div>
-  <a class="btn" href="contact.html">この結果を持って、相談する<small>初回は無料・オンライン30分</small></a>
-  <a class="btn ghost" href="course.html">まず7日間の無料講座を読む<small>1日1通・1分で読めます</small></a>
-</section>
-
-<section>
-  <h3>この結果は、どこにも送信されません</h3>
-  <p class="small">入力した内容はこの画面の中だけで計算しています。サーバーには何も送っていません。
-  相談されるときは、この画面をそのままスクリーンショットしてお持ちください。</p>
-</section>
-
-</div>
-
-<div class="foot"><div class="wrap">
-  <b>TripleEight（トリプルエイト）</b>
-  現場仕事の会社に、時間を作る。<br>
-  河村杜永（かわむら・もりひさ）<br>
-  著書『成果は「仕組み×行動×AI」で決まる。』
-</div></div>
-
+<!-- LIFF SDK。LINE公式が案内している読み込み方。
+     ※このURLはLINE側で随時更新されるため integrity（SRI）は付けない。付けると更新の瞬間に動かなくなる。 -->
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <script>
+/* ══════════════════════════════════════════
+   設定：LIFF ID が入ると「LINEに送る」が出ます
+   ══════════════════════════════════════════ */
+const LIFF_ID = "";   // ← LINE Developers で発行後にここへ
+
+/* ── 業務データ ──
+   chain = これを外したあと、次に詰まりやすいところ */
 const JOBS = [
-  ["見積を作る","金額を決める・書類にする"],
-  ["請求書を出す","作成・送付・控えの保管"],
-  ["入金の確認","通帳を見る・催促する"],
-  ["現場の段取り","誰をどこへ・何時に"],
-  ["職人さん・協力会社への連絡","電話・LINE"],
-  ["材料や機材の手配","発注・数量の判断"],
-  ["お客様からの電話に出る","問い合わせ・日程・値段の話"],
-  ["クレーム・トラブルの対応",""],
-  ["現場写真の整理","撮る・分ける・保存する"],
-  ["日報・報告書のとりまとめ",""],
-  ["求人・面接",""],
-  ["新人に教える",""],
-  ["勤怠の集計・給与の計算",""],
-  ["銀行・税理士とのやりとり",""],
-  ["契約書・書類を作る",""],
-  ["ホームページやSNSの更新",""],
-  ["補助金・助成金の申請",""]
-];
-const HOURS = [["〜2時間",2],["3〜5時間",4],["6〜10時間",8],["11〜20時間",15],["21時間〜",25]];
-const WHO = [
-  ["社長がやるしかない","判断が要る",1],
-  ["教えればできる","手順があれば",2],
-  ["本当は誰でもできる","もう任せられる",3]
+  {n:"見積・提案書をつくる",     chain:"受注が増えるぶん、<b>請求と入金の確認</b>が追いつかなくなります。"},
+  {n:"請求書を出す",             chain:"請求が速くなると、今度は<b>入金の確認と催促</b>が溜まります。"},
+  {n:"入金の確認・催促",         chain:"お金の流れは見えますが、<b>見積の作成</b>が変わらないと入口が詰まったままです。"},
+  {n:"お客様からの電話・問い合わせ", chain:"電話が減ったぶん、<b>日程の調整</b>がまとめて来るようになります。"},
+  {n:"日程の調整",               chain:"予定は埋まりますが、<b>現場・案件の段取り</b>が追いつかなくなります。"},
+  {n:"現場・案件の段取り",       chain:"段取りが回り出すと、<b>協力先への連絡</b>の量が増えます。"},
+  {n:"協力先・外注への連絡",     chain:"連絡は減りますが、<b>日報のとりまとめ</b>が残ります。"},
+  {n:"クレーム・トラブル対応",   chain:"件数は減っても、<b>社長にしかできない判断</b>だけは残ります。ここは外さないでください。"},
+  {n:"日報・報告書のとりまとめ", chain:"報告は揃いますが、<b>写真や書類の整理</b>が置き去りになります。"},
+  {n:"写真・書類の整理",         chain:"探す時間は消えますが、<b>日報のとりまとめ</b>と両方やらないと元に戻ります。"},
+  {n:"勤怠の集計・給与の計算",   chain:"月末は楽になりますが、<b>銀行・税理士とのやりとり</b>が残ります。"},
+  {n:"求人・面接",               chain:"採用は進みますが、<b>新人に教える</b>時間が丸ごと増えます。"},
+  {n:"新人に教える",             chain:"教える形が残ると、次の採用が楽になります。<b>ここは順番の最後で構いません。</b>"},
+  {n:"銀行・税理士とのやりとり", chain:"数字は整いますが、<b>勤怠と給与</b>が手作業のままだと毎月やり直しになります。"},
+  {n:"契約書・書類をつくる",     chain:"書類は速くなりますが、<b>見積の作成</b>が変わらないと前工程で待たされます。"},
+  {n:"ホームページ・SNSの更新",  chain:"発信は続きますが、<b>問い合わせの受付</b>が増えて社長に戻ってきます。"},
+  {n:"補助金・助成金の申請",     chain:"通っても、<b>報告書のとりまとめ</b>が新しく発生します。"}
 ];
 
-const rows = document.getElementById('rows');
+const HOURS = [["月2時間まで",2],["月3〜5時間",4],["月6〜10時間",8],["月11〜20時間",15],["月21時間以上",25]];
+const WHO = [
+  ["社長がやるしかない","判断が要る",0.2],
+  ["教えればできる","手順さえあれば",0.6],
+  ["本当は誰でもできる","もう任せられる",1.0]
+];
+
+/* ── 状態 ── */
+let picked = [];      // 選ばれた JOBS の index
+let cursor = 0;       // いま何個目の詳細か
+const ans = {};       // {jobIndex: {h:時間, w:任せやすさ}}
+let phase = "intro";  // intro / pick / detail / res
+
+const $ = s => document.querySelector(s);
+const bar = $("#bar"), barIn = $("#barIn");
+
+/* ── 業務チップを描く ── */
 JOBS.forEach((j,i)=>{
-  const d=document.createElement('div');
-  d.className='row'; d.id='row'+i;
-  d.innerHTML=`
-   <div class="top">
-     <input type="checkbox" class="chk" id="c${i}">
-     <label for="c${i}">${j[0]}${j[1]?`<br><span class="small">${j[1]}</span>`:''}</label>
-   </div>
-   <div class="detail">
-     <p class="dl">月にどれくらい？</p>
-     <div class="opts c3">
-       ${HOURS.map((h,k)=>`<div class="opt"><input type="radio" name="h${i}" id="h${i}_${k}" value="${h[1]}"><label for="h${i}_${k}">${h[0]}</label></div>`).join('')}
-     </div>
-     <p class="dl">他の人でもできそう？</p>
-     <div class="opts">
-       ${WHO.map((w,k)=>`<div class="opt${k===2?' red':''}"><input type="radio" name="w${i}" id="w${i}_${k}" value="${w[2]}"><label for="w${i}_${k}">${w[0]}${w[1]?`<small>${w[1]}</small>`:''}</label></div>`).join('')}
-     </div>
-   </div>`;
-  rows.appendChild(d);
+  const d = document.createElement("div");
+  d.className = "job"; d.dataset.i = i;
+  d.innerHTML = j.n + '<span class="tick">✓</span>';
+  d.onclick = ()=>{
+    d.classList.toggle("on");
+    const on = d.classList.contains("on");
+    if(on) picked.push(i); else picked = picked.filter(x=>x!==i);
+    picked.sort((a,b)=>a-b);
+    $("#count").innerHTML = picked.length
+      ? '<b>'+picked.length+'</b> つ選ばれています'
+      : 'まだ選ばれていません';
+    renderBar();
+  };
+  $("#jobs").appendChild(d);
 });
 
-function calc(){
-  let tot=0,a={1:0,2:0,3:0},any=false;
-  JOBS.forEach((j,i)=>{
-    const on=document.getElementById('c'+i).checked;
-    document.getElementById('row'+i).classList.toggle('on',on);
-    if(!on) return;
-    any=true;
-    const h=document.querySelector(`input[name=h${i}]:checked`);
-    const w=document.querySelector(`input[name=w${i}]:checked`);
-    if(!h) return;
-    const v=+h.value; tot+=v;
-    if(w) a[+w.value]+=v;
-  });
-  document.getElementById('total').innerHTML=tot+'<small>時間/月</small>';
-  document.getElementById('bd').style.display = tot>0?'grid':'none';
-  document.getElementById('t3').textContent=a[3]+'時間';
-  document.getElementById('t2').textContent=a[2]+'時間';
-  document.getElementById('t1').textContent=a[1]+'時間';
-
-  const free=a[3]+a[2];
-  const r2=document.getElementById('res2'), af=document.getElementById('after');
-  if(free>0){
-    r2.classList.remove('hide'); af.classList.remove('hide');
-    document.getElementById('free').innerHTML=free+'<small>時間/月</small>';
-    let m='';
-    if(free<10) m='まず、この中の1つだけ選んでください。全部やろうとすると続きません。';
-    else if(free<30) m='1日あたり、およそ'+(free/20).toFixed(1)+'時間。まず1つ、手放すところから始めます。';
-    else m='1日あたり、およそ'+(free/20).toFixed(1)+'時間。ここまで来ると、人を1人雇うのと同じ量です。';
-    document.getElementById('freemsg').textContent=m;
-  }else{
-    r2.classList.add('hide'); af.classList.add('hide');
-  }
-  const rs=document.querySelector('#res .rs');
-  rs.textContent = any ? '内訳は下のとおりです。' : '上のリストにチェックを入れると、ここに出ます。';
+/* ── 進捗 ── */
+function setProg(){
+  if(phase==="intro"||phase==="res"){ $("#prog").classList.add("hidden"); return; }
+  $("#prog").classList.remove("hidden");
+  const total = 1 + picked.length;
+  const now = phase==="pick" ? 1 : 1 + cursor + 1;
+  const pct = Math.round(now/total*100);
+  $("#pnum").textContent = now + " / " + total;
+  $("#ppct").textContent = pct + "%";
+  $("#pfill").style.width = pct + "%";
 }
-document.addEventListener('change',calc);
-calc();
+
+/* ── 下部バー ── */
+function renderBar(){
+  bar.classList.remove("hidden");
+  if(phase==="intro"){
+    barIn.innerHTML = '<button class="btn" id="go">はじめる（5分）</button>';
+    $("#go").onclick = ()=>{ phase="pick"; show(); };
+  }
+  else if(phase==="pick"){
+    barIn.innerHTML = '<button class="btn" id="nx" '+(picked.length?'':'disabled')+'>次へ（'+picked.length+'つ）</button>';
+    if(picked.length) $("#nx").onclick = ()=>{ phase="detail"; cursor=0; show(); };
+  }
+  else if(phase==="detail"){
+    const a = ans[picked[cursor]] || {};
+    const ok = a.h!==undefined && a.w!==undefined;
+    const last = cursor === picked.length-1;
+    barIn.innerHTML =
+      '<button class="btn ghost" id="bk">戻る</button>' +
+      '<button class="btn" id="nx" '+(ok?'':'disabled')+'>'+(last?'結果を見る':'次へ')+'</button>';
+    $("#bk").onclick = ()=>{
+      if(cursor===0){ phase="pick"; } else { cursor--; }
+      show();
+    };
+    if(ok) $("#nx").onclick = ()=>{
+      if(last){ phase="res"; calc(); } else { cursor++; }
+      show();
+    };
+  }
+  else if(phase==="res"){
+    if(LIFF_ID && window.liff && liff.isInClient && liff.isInClient()){
+      barIn.innerHTML = '<button class="btn ghost" id="bk">戻る</button><button class="btn acc" id="send">この結果をLINEに送る</button>';
+      $("#bk").onclick = ()=>{ phase="detail"; cursor=picked.length-1; show(); };
+      $("#send").onclick = sendToLine;
+    } else {
+      barIn.innerHTML = '<button class="btn ghost" id="bk">戻る</button><button class="btn" id="cp">結果をコピーする</button>';
+      $("#bk").onclick = ()=>{ phase="detail"; cursor=picked.length-1; show(); };
+      $("#cp").onclick = copyResult;
+    }
+  }
+}
+
+/* ── 詳細カードを描く ── */
+function renderDetail(){
+  const i = picked[cursor];
+  const j = JOBS[i];
+  if(!ans[i]) ans[i] = {};
+  $("#dlabel").textContent = "STEP 2 ／ " + (cursor+1) + " つ目";
+
+  let html = '<div class="jobcard"><div class="jt">'+j.n+'</div>';
+  html += '<div class="sq">月にどれくらいの時間ですか</div><div class="opts" data-k="h">';
+  HOURS.forEach((h,k)=>{
+    const on = ans[i].h===h[1] ? " on" : "";
+    html += '<div class="opt'+on+'" data-v="'+h[1]+'">'+h[0]+'<span class="tick">✓</span></div>';
+  });
+  html += '</div>';
+  html += '<div class="sq">これ、他の人でもできそうですか</div><div class="opts" data-k="w">';
+  WHO.forEach(w=>{
+    const on = ans[i].w===w[2] ? " on acc" : "";
+    html += '<div class="opt acc'+on+'" data-v="'+w[2]+'"><span>'+w[0]+(w[1]?'<small>'+w[1]+'</small>':'')+'</span><span class="tick">✓</span></div>';
+  });
+  html += '</div></div>';
+  $("#dcard").innerHTML = html;
+
+  $("#dcard").querySelectorAll(".opts").forEach(g=>{
+    const key = g.dataset.k;
+    g.querySelectorAll(".opt").forEach(o=>{
+      o.onclick = ()=>{
+        g.querySelectorAll(".opt").forEach(x=>x.classList.remove("on"));
+        o.classList.add("on");
+        ans[i][key] = parseFloat(o.dataset.v);
+        renderBar();
+      };
+    });
+  });
+}
+
+/* ── 画面切り替え ── */
+function show(){
+  ["intro","pick","detail","res"].forEach(k=>{
+    $("#s-"+k).classList.toggle("hidden", k!==phase);
+  });
+  if(phase==="detail") renderDetail();
+  setProg(); renderBar();
+  window.scrollTo({top:0,behavior:"instant"});
+}
+
+/* ── 計算 ── */
+let resultText = "";
+function calc(){
+  const rows = picked.map(i=>({
+    i, name:JOBS[i].n, chain:JOBS[i].chain,
+    h:ans[i].h, w:ans[i].w,
+    free: ans[i].h * ans[i].w
+  }));
+  const total = Math.round(rows.reduce((s,r)=>s+r.free,0));
+  rows.sort((a,b)=>b.free-a.free);
+
+  $("#rHours").innerHTML = total + '<span>時間/月</span>';
+  $("#rCap").textContent = picked.length + "つ選ばれました。うち手放せるぶんの合計です。";
+
+  const top = rows[0];
+  $("#rFirst").textContent = top.name;
+  $("#rFirstWhy").innerHTML = "月" + top.h + "時間かかっていて、" +
+    (top.w>=1 ? "もう任せられる状態です。" : top.w>=0.6 ? "手順さえあれば任せられます。" : "判断が要るぶん、外しにくい仕事です。") +
+    "<br><b>ここを外すと、月およそ" + Math.round(top.free) + "時間が戻ります。</b>";
+  $("#rChain").innerHTML = top.chain;
+
+  const ol = $("#rOrder"); ol.innerHTML = "";
+  rows.slice(0,5).forEach(r=>{
+    const li = document.createElement("li");
+    li.innerHTML = '<span>'+r.name+'</span><span class="h">月'+Math.round(r.free)+'h</span>';
+    ol.appendChild(li);
+  });
+
+  const lines = ["【詰まりリストの結果】",
+    "手放せる時間：月" + total + "時間",
+    "最初に外す：" + top.name + "（月" + Math.round(top.free) + "時間）",
+    "",
+    "外す順番："];
+  rows.slice(0,5).forEach((r,k)=> lines.push((k+1)+". "+r.name+"（月"+Math.round(r.free)+"時間）"));
+  resultText = lines.join("\n");
+}
+
+/* ── LINEに送る ── */
+async function sendToLine(){
+  const b = $("#send");
+  b.disabled = true; b.textContent = "送信しています…";
+  try{
+    await liff.sendMessages([{type:"text", text:resultText}]);
+    b.textContent = "送信しました";
+    setTimeout(()=>liff.closeWindow(), 1000);
+  }catch(e){
+    alert("送信できませんでした。お手数ですが、トーク画面に直接ご記入ください。");
+    b.disabled = false; b.textContent = "この結果をLINEに送る";
+  }
+}
+
+/* ── コピー ── */
+function copyResult(){
+  const b = $("#cp");
+  const done = ()=>{ b.textContent = "コピーしました"; setTimeout(()=>b.textContent="結果をコピーする",1800); };
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(resultText).then(done).catch(fallback);
+  } else fallback();
+  function fallback(){
+    const t = document.createElement("textarea");
+    t.value = resultText; t.style.position="fixed"; t.style.opacity="0";
+    document.body.appendChild(t); t.select();
+    try{ document.execCommand("copy"); done(); }catch(e){ alert("コピーできませんでした"); }
+    document.body.removeChild(t);
+  }
+}
+
+/* ── 起動 ── */
+(async()=>{
+  if(LIFF_ID){ try{ await liff.init({liffId:LIFF_ID}); }catch(e){} }
+  show();
+})();
 </script>
 </body>
 </html>
