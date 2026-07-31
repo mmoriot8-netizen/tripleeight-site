@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>詰まりリスト｜TripleEight</title>
+<meta name="description" content="社長の手から離せる仕事を、選ぶだけで洗い出します。書く必要はありません。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bar"><div class="wrap">
+  <span class="logo">TripleEight</span>
+  <span class="tag">現場仕事の会社に、<br>時間を作る</span>
+</div></div>
+
+<div class="hero"><div class="wrap">
+  <h1>いま、<span class="em">社長にしかできない仕事</span>を<br>数えてみませんか</h1>
+  <p>書くところはありません。当てはまるものを選ぶだけです。5分で終わります。</p>
+</div></div>
+
+<div class="wrap">
+
+<section>
+  <div class="note">
+    <b>使い方</b><br>
+    ① 社長ご自身がやっている仕事にチェック<br>
+    ② 月に何時間くらいか、選ぶ<br>
+    ③ 他の人でもできそうか、選ぶ<br>
+    最後に、<b>手放せる時間が出ます。</b>
+  </div>
+</section>
+
+<h2>① 社長がやっている仕事を選ぶ</h2>
+<p class="small">少しでも関わっているものは、チェックしてください。全部やっていなくて構いません。</p>
+
+<div id="rows"></div>
+
+<h2>② 結果</h2>
+
+<div class="result" id="res">
+  <p class="rl">いま、社長が使っている時間</p>
+  <p class="rn" id="total">0<small>時間/月</small></p>
+  <p class="rs">上のリストにチェックを入れると、ここに出ます。</p>
+  <div class="bd" id="bd" style="display:none">
+    <div><span>すぐ手放せる</span><b id="t3">0時間</b></div>
+    <div><span>手順を作れば手放せる</span><b id="t2">0時間</b></div>
+    <div><span>社長がやるしかない</span><b id="t1">0時間</b></div>
+  </div>
+</div>
+
+<div class="result red hide" id="res2">
+  <p class="rl">お盆明けから、手放せる時間</p>
+  <p class="rn" id="free">0<small>時間/月</small></p>
+  <p class="rs" id="freemsg"></p>
+</div>
+
+<section id="after" class="hide">
+  <h2>③ で、それ誰がやるの？</h2>
+  <p class="lead">ここまでで、手放せる仕事が見えました。<br>
+  次に出てくる問いは、いつも同じです。</p>
+  <div class="note red">
+    <b>「で、それ、誰がやるの？」</b><br>
+    人を増やすと、毎月の給与と社会保険がかかります。募集にも時間がかかります。<br>
+    <b>人を増やす前に、その仕事自体を減らせないか</b>を一緒に考えます。
+  </div>
+  <a class="btn" href="contact.html">この結果を持って、相談する<small>初回は無料・オンライン30分</small></a>
+  <a class="btn ghost" href="course.html">まず7日間の無料講座を読む<small>1日1通・1分で読めます</small></a>
+</section>
+
+<section>
+  <h3>この結果は、どこにも送信されません</h3>
+  <p class="small">入力した内容はこの画面の中だけで計算しています。サーバーには何も送っていません。
+  相談されるときは、この画面をそのままスクリーンショットしてお持ちください。</p>
+</section>
+
+</div>
+
+<div class="foot"><div class="wrap">
+  <b>TripleEight（トリプルエイト）</b>
+  現場仕事の会社に、時間を作る。<br>
+  河村杜永（かわむら・もりひさ）<br>
+  著書『成果は「仕組み×行動×AI」で決まる。』
+</div></div>
+
+<script>
+const JOBS = [
+  ["見積を作る","金額を決める・書類にする"],
+  ["請求書を出す","作成・送付・控えの保管"],
+  ["入金の確認","通帳を見る・催促する"],
+  ["現場の段取り","誰をどこへ・何時に"],
+  ["職人さん・協力会社への連絡","電話・LINE"],
+  ["材料や機材の手配","発注・数量の判断"],
+  ["お客様からの電話に出る","問い合わせ・日程・値段の話"],
+  ["クレーム・トラブルの対応",""],
+  ["現場写真の整理","撮る・分ける・保存する"],
+  ["日報・報告書のとりまとめ",""],
+  ["求人・面接",""],
+  ["新人に教える",""],
+  ["勤怠の集計・給与の計算",""],
+  ["銀行・税理士とのやりとり",""],
+  ["契約書・書類を作る",""],
+  ["ホームページやSNSの更新",""],
+  ["補助金・助成金の申請",""]
+];
+const HOURS = [["〜2時間",2],["3〜5時間",4],["6〜10時間",8],["11〜20時間",15],["21時間〜",25]];
+const WHO = [
+  ["社長がやるしかない","判断が要る",1],
+  ["教えればできる","手順があれば",2],
+  ["本当は誰でもできる","もう任せられる",3]
+];
+
+const rows = document.getElementById('rows');
+JOBS.forEach((j,i)=>{
+  const d=document.createElement('div');
+  d.className='row'; d.id='row'+i;
+  d.innerHTML=`
+   <div class="top">
+     <input type="checkbox" class="chk" id="c${i}">
+     <label for="c${i}">${j[0]}${j[1]?`<br><span class="small">${j[1]}</span>`:''}</label>
+   </div>
+   <div class="detail">
+     <p class="dl">月にどれくらい？</p>
+     <div class="opts c3">
+       ${HOURS.map((h,k)=>`<div class="opt"><input type="radio" name="h${i}" id="h${i}_${k}" value="${h[1]}"><label for="h${i}_${k}">${h[0]}</label></div>`).join('')}
+     </div>
+     <p class="dl">他の人でもできそう？</p>
+     <div class="opts">
+       ${WHO.map((w,k)=>`<div class="opt${k===2?' red':''}"><input type="radio" name="w${i}" id="w${i}_${k}" value="${w[2]}"><label for="w${i}_${k}">${w[0]}${w[1]?`<small>${w[1]}</small>`:''}</label></div>`).join('')}
+     </div>
+   </div>`;
+  rows.appendChild(d);
+});
+
+function calc(){
+  let tot=0,a={1:0,2:0,3:0},any=false;
+  JOBS.forEach((j,i)=>{
+    const on=document.getElementById('c'+i).checked;
+    document.getElementById('row'+i).classList.toggle('on',on);
+    if(!on) return;
+    any=true;
+    const h=document.querySelector(`input[name=h${i}]:checked`);
+    const w=document.querySelector(`input[name=w${i}]:checked`);
+    if(!h) return;
+    const v=+h.value; tot+=v;
+    if(w) a[+w.value]+=v;
+  });
+  document.getElementById('total').innerHTML=tot+'<small>時間/月</small>';
+  document.getElementById('bd').style.display = tot>0?'grid':'none';
+  document.getElementById('t3').textContent=a[3]+'時間';
+  document.getElementById('t2').textContent=a[2]+'時間';
+  document.getElementById('t1').textContent=a[1]+'時間';
+
+  const free=a[3]+a[2];
+  const r2=document.getElementById('res2'), af=document.getElementById('after');
+  if(free>0){
+    r2.classList.remove('hide'); af.classList.remove('hide');
+    document.getElementById('free').innerHTML=free+'<small>時間/月</small>';
+    let m='';
+    if(free<10) m='まず、この中の1つだけ選んでください。全部やろうとすると続きません。';
+    else if(free<30) m='1日あたり、およそ'+(free/20).toFixed(1)+'時間。まず1つ、手放すところから始めます。';
+    else m='1日あたり、およそ'+(free/20).toFixed(1)+'時間。ここまで来ると、人を1人雇うのと同じ量です。';
+    document.getElementById('freemsg').textContent=m;
+  }else{
+    r2.classList.add('hide'); af.classList.add('hide');
+  }
+  const rs=document.querySelector('#res .rs');
+  rs.textContent = any ? '内訳は下のとおりです。' : '上のリストにチェックを入れると、ここに出ます。';
+}
+document.addEventListener('change',calc);
+calc();
+</script>
+</body>
+</html>
