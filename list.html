@@ -434,26 +434,57 @@ function calc(){
   $("#rHours").innerHTML = total + '<span>時間/月</span>';
   $("#rCap").textContent = picked.length + "つ選ばれました。うち手放せるぶんの合計です。";
 
-  const top = rows[0];
+  // 「社長がやるしかない（判断が要る）」ものは、外す候補にしない。
+  // 外せないと答えたものを「外しましょう」と言うのは矛盾する。
+  const movable = rows.filter(r=>r.w>=0.6);
+  const ol = $("#rOrder"); ol.innerHTML = "";
+
+  if(movable.length===0){
+    $("#rFirst").textContent = "いまは、ありません";
+    $("#rFirstWhy").innerHTML =
+      "選ばれた仕事は、すべて<b>「社長がやるしかない（判断が要る）」</b>とお答えになりました。<br>" +
+      "この状態では、外す前にやることがあります。<b>判断の基準を、言葉にして残すことです。</b>" +
+      "基準が残れば、同じ判断を他の人ができるようになります。";
+    $("#rChain").innerHTML =
+      "先に人を増やしても、<b>判断だけは社長に戻ってきます。</b>だから採用しても楽になりません。";
+    const li = document.createElement("li");
+    li.innerHTML = '<span>判断の基準を言葉にする</span>';
+    ol.appendChild(li);
+    resultText = ["【詰まりリストの結果】",
+      "手放せる時間：月" + total + "時間",
+      "いま外せる仕事：なし（すべて「社長がやるしかない」）",
+      "最初にやること：判断の基準を言葉にして残す"].join("\n");
+    return;
+  }
+
+  const top = movable[0];
   $("#rFirst").textContent = top.name;
   $("#rFirstWhy").innerHTML = "「" + top.hLabel + "」かかっていて、" +
-    (top.w>=1 ? "もう任せられる状態です。" : top.w>=0.6 ? "手順さえあれば任せられます。" : "判断が要るぶん、外しにくい仕事です。") +
+    (top.w>=1 ? "もう任せられる状態です。" : "手順さえあれば任せられます。") +
     "<br><b>ここを外すと、月およそ" + Math.round(top.free) + "時間が戻ります。</b>";
   $("#rChain").innerHTML = top.chain;
 
-  const ol = $("#rOrder"); ol.innerHTML = "";
-  rows.slice(0,5).forEach(r=>{
+  movable.slice(0,5).forEach(r=>{
     const li = document.createElement("li");
     li.innerHTML = '<span>'+r.name+'</span><span class="h">月'+Math.round(r.free)+'h</span>';
     ol.appendChild(li);
   });
+
+  const stay = rows.filter(r=>r.w<0.6);
+  if(stay.length){
+    const li = document.createElement("li");
+    li.style.cssText = "opacity:.62;font-weight:600";
+    li.innerHTML = '<span>' + stay.map(r=>r.name).join("、") + '<br><span style="font-size:12.5px;color:var(--muted)">判断が要るため、ここは外さない</span></span>';
+    ol.appendChild(li);
+  }
 
   const lines = ["【詰まりリストの結果】",
     "手放せる時間：月" + total + "時間",
     "最初に外す：" + top.name + "（月" + Math.round(top.free) + "時間）",
     "",
     "外す順番："];
-  rows.slice(0,5).forEach((r,k)=> lines.push((k+1)+". "+r.name+"（月"+Math.round(r.free)+"時間）"));
+  movable.slice(0,5).forEach((r,k)=> lines.push((k+1)+". "+r.name+"（月"+Math.round(r.free)+"時間）"));
+  if(stay.length) lines.push("", "外さない（判断が要る）：" + stay.map(r=>r.name).join("、"));
   resultText = lines.join("\n");
 }
 
