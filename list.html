@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>詰まりリスト｜TripleEight</title>
-<meta name="description" content="社長にしかできない仕事はどれか。選ぶだけで、外す順番まで出ます。5分。">
+<meta name="description" content="社長にしかできない仕事はどれか。選ぶだけで、外す順番と会社の詰まりタイプまで出ます。まず5分。">
 <style>
 :root{
   --main:#001743;
@@ -14,6 +14,7 @@
   --line:#dfe3e8;
   --text:#1a1d21;
   --muted:#6c7480;
+  --lineg:#06C755;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
@@ -88,13 +89,27 @@ body{
 .jobcard .sq{font-size:14.5px;font-weight:800;margin:16px 0 8px}
 .jobcard .sq:first-of-type{margin-top:0}
 
-/* ── 結果 ── */
+/* ── 深掘り ── */
+.deepcard{background:#fff;border:1.5px solid var(--main);border-radius:14px;padding:20px 18px;margin-top:18px}
+.deepcard .sec{font-size:12px;font-weight:800;color:var(--accent);letter-spacing:.08em;margin-bottom:8px}
+.deepcard .dq{font-size:19px;font-weight:800;line-height:1.55;color:var(--main)}
+
+/* ── 中間・結果 ── */
 .res{padding:20px 0}
 .hero{background:var(--main);color:#fff;border-radius:16px;padding:28px 22px;text-align:center;margin-bottom:14px}
 .hero .lbl{font-size:14px;font-weight:700;opacity:.8}
 .hero .big{font-size:60px;font-weight:800;line-height:1.1;margin:6px 0 2px;letter-spacing:-.02em}
 .hero .big span{font-size:22px;font-weight:800;margin-left:4px}
 .hero .cap{font-size:13px;opacity:.72;margin-top:10px;line-height:1.7}
+.hero .year{font-size:15px;font-weight:800;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.22);line-height:1.8}
+
+.typebox{background:#fff;border:2px solid var(--main);border-radius:16px;padding:24px 22px;margin-bottom:14px}
+.typebox .lbl{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.08em}
+.typebox .tname{font-size:24px;font-weight:800;color:var(--main);line-height:1.45;margin:8px 0 4px}
+.typebox .tsub{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:12px}
+.typebox p{font-size:14.5px;line-height:1.9}
+.typebox .step1{margin-top:14px;background:#f7f8fa;border-radius:10px;padding:14px 15px;font-size:14px;line-height:1.8}
+.typebox .step1 b{color:var(--main)}
 
 .first{background:var(--accent);border-radius:16px;padding:24px 22px;margin-bottom:14px}
 .first .lbl{font-size:13px;font-weight:800;color:var(--main);opacity:.8;letter-spacing:.06em}
@@ -129,6 +144,15 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
 .next h3{font-size:17px;font-weight:800;margin-bottom:10px}
 .next p{font-size:14.5px;line-height:1.85;color:var(--text)}
 .next .strong{font-weight:800;color:var(--main)}
+.linebtn{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;
+  min-height:54px;border-radius:12px;background:var(--lineg);color:#fff;
+  font-size:16px;font-weight:800;text-decoration:none}
+
+.midbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin-bottom:14px}
+.midbox h3{font-size:16px;font-weight:800;margin-bottom:10px}
+.midbox li{list-style:none;font-size:14.5px;font-weight:700;padding:7px 0 7px 28px;position:relative}
+.midbox li::before{content:"";position:absolute;left:5px;top:16px;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.midbox .mnote{font-size:13px;color:var(--muted);margin-top:10px}
 
 /* ── 下部バー ── */
 .bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
@@ -138,7 +162,9 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
      font-family:inherit;cursor:pointer;background:var(--main);color:#fff;transition:.12s}
 .btn:disabled{background:#b8bec6;cursor:not-allowed}
 .btn.ghost{flex:0 0 88px;background:#fff;color:var(--muted);border:1.5px solid var(--line);font-size:15px}
+.btn.ghost.wide{flex:1}
 .btn.acc{background:var(--accent);color:var(--main)}
+.btn.line{background:var(--lineg)}
 
 .foot{text-align:center;font-size:12px;color:var(--muted);padding:26px 0 10px;line-height:1.9}
 </style>
@@ -161,20 +187,21 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
 
     <div class="specs">
       <span class="spec"><b>選ぶだけ</b></span>
-      <span class="spec"><b>5分</b></span>
+      <span class="spec"><b>まず5分</b></span>
       <span class="spec"><b>無料</b>・登録不要</span>
     </div>
 
     <div class="knows">
       <h2>わかること</h2>
       <ul>
-        <li>いま手放せる時間（月あたり）</li>
+        <li>いま手放せる時間（月あたり・年換算）</li>
         <li><b>最初に外すべき、たった1つ</b></li>
         <li><b>それを外すと、次にどこが詰まるか</b></li>
         <li>2番目・3番目に外すもの</li>
+        <li>会社の<b>詰まりタイプ</b>（6タイプ・深掘り10分）</li>
       </ul>
     </div>
-    <p class="note">※ 結果はこの画面に出ます。メールアドレスの入力はありません。</p>
+    <p class="note">※ 結果はこの画面に出ます。メールアドレスの入力はありません。<br>※ 深掘りは任意です。5分の結果だけでも持ち帰れます。</p>
   </section>
 
   <!-- ════════ 1. 業務を選ぶ ════════ -->
@@ -194,12 +221,56 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
     <div id="dcard"></div>
   </section>
 
+  <!-- ════════ 2.5 中間結果 ════════ -->
+  <section class="res hidden" id="s-mid">
+    <div class="hero">
+      <div class="lbl">いま手放せる時間</div>
+      <div class="big" id="mHours">0<span>時間/月</span></div>
+      <div class="cap" id="mCap"></div>
+      <div class="year" id="mYear"></div>
+    </div>
+    <div class="midbox">
+      <h3>ここまでが、5分の結果です</h3>
+      <ul>
+        <li>あと10分の深掘りで、<b>会社の詰まりタイプ</b>（6タイプ）が出ます</li>
+        <li>なぜ詰まるのか、<b>根っこ</b>が分かります</li>
+        <li>タイプ別の<b>今日からの一歩</b>まで出ます</li>
+      </ul>
+      <p class="mnote">30問・選ぶだけ。1問ずつタップで進みます。途中でやめても、結果は見られます。</p>
+    </div>
+  </section>
+
+  <!-- ════════ 2.7 深掘り ════════ -->
+  <section class="step hidden" id="s-deep">
+    <div class="section-label" id="deepLabel">深掘り</div>
+    <div class="q" id="deepTitle">もう少しだけ、<br>会社のことを教えてください</div>
+    <div id="deepCard"></div>
+  </section>
+
   <!-- ════════ 3. 結果 ════════ -->
   <section class="res hidden" id="s-res">
     <div class="hero">
       <div class="lbl">いま手放せる時間</div>
       <div class="big" id="rHours">0<span>時間/月</span></div>
       <div class="cap" id="rCap"></div>
+      <div class="year" id="rYear"></div>
+    </div>
+
+    <div class="typebox hidden" id="rTypeBox">
+      <div class="lbl">この会社の詰まりタイプ</div>
+      <div class="tname" id="rType">—</div>
+      <div class="tsub" id="rType2nd"></div>
+      <p id="rTypeDesc"></p>
+      <div class="step1" id="rTypeStep"></div>
+    </div>
+
+    <div class="midbox hidden" id="rDeepInvite">
+      <h3>詰まりタイプは、まだ出ていません</h3>
+      <ul>
+        <li>あと10分の深掘りで、<b>6タイプのどれか</b>が出ます</li>
+        <li>タイプ別の<b>今日からの一歩</b>も出ます</li>
+      </ul>
+      <p class="mnote">下の「深掘りする」からいつでも出せます。</p>
     </div>
 
     <div class="first">
@@ -219,20 +290,21 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
     </div>
 
     <details class="calc">
-      <summary>この数字の出し方</summary>
+      <summary>この数字とタイプの出し方</summary>
       <div class="body">
         <p><code>手放せる時間 ＝ 月の時間 × 任せやすさ</code></p>
         <p>「本当は誰でもできる」＝ 100%、「教えればできる」＝ 60%、「社長がやるしかない」＝ 20% として合計しています。</p>
-        <p><b>外す順番は、時間の多い順ではありません。</b>「よく発生して、かつ任せやすいもの」から並べています。月1回の面倒な作業より、毎日30分の作業を先に外したほうが、空く時間が大きいからです。</p>
+        <p><b>外す順番は、時間の多い順ではありません。</b>「よく発生して、かつ任せやすいもの」から並べています。</p>
+        <p>詰まりタイプは、深掘り17問を6つの根っこ（判断・方針・定着・属人化・道具・連鎖）に分けて集計し、最も濃く出たものを表示しています。</p>
         <p>※ 目安です。実際は業種と体制で変わります。</p>
       </div>
     </details>
 
     <div class="next">
-      <h3>で、それ、誰がやるの？</h3>
-      <p>ここまでで、手放せる仕事は見えました。次に出てくる問いは、いつも同じです。<br><br>
-      人を増やすと、毎月の給与と社会保険がかかります。募集にも時間がかかります。<br>
-      <span class="strong">人を増やす前に、その仕事自体を減らせないか</span>を一緒に考えます。</p>
+      <h3>ここから先は、一人だと止まりやすい</h3>
+      <p>診断で、詰まっている場所は見えました。次の工程は<span class="strong">「判断の基準を言葉にする」</span>——ここが、一人でやると一番止まりやすいところです。<br><br>
+      この診断書を持って、オンラインで30分、お話しできます。<span class="strong">売り込みはしません。</span>順番の相談だけでも構いません。</p>
+      <a class="linebtn" id="lineBtn" href="https://line.me/R/ti/p/%40210uvwaj" target="_blank" rel="noopener">公式LINEで、この結果を相談する</a>
     </div>
   </section>
 
@@ -283,11 +355,75 @@ const WHO = [
   ["本当は誰でもできる","もう任せられる",1.0]
 ];
 
+/* ── 深掘り 17問（6つの根っこ） ──
+   聞き方の原則：意見ではなく事実。責めない。 */
+const SECS = {
+  A:"判断のあつまり方", B:"方針の決まり方", C:"ルールの残り方",
+  D:"仕事の預け方", E:"道具の入れ方", F:"変えたあとの起こり方"
+};
+const DEEP = [
+  {s:"A", q:"「これでいいですか」という確認は、1日に何回来ますか", o:[["来ない",0],["1〜2回",1],["3〜5回",2],["6回以上",3]]},
+  {s:"A", q:"社長が2日間連絡を取れなかったら、仕事はどうなりますか", o:[["止まらない",0],["一部止まる",1.5],["ほぼ止まる",3]]},
+  {s:"A", q:"金額・日程・クレーム対応。社長以外が最終判断できるのは", o:[["3つとも",0],["1〜2つ",1.5],["ゼロ",3]]},
+  {s:"A", q:"会議で決まらず、「社長が決めてください」で終わる議題は", o:[["ない",0],["たまにある",1.5],["よくある",3]]},
+  {s:"A", q:"社長の休みの日に、仕事の連絡は", o:[["来ない",0],["たまに来る",1.5],["必ず来る",3]]},
+  {s:"B", q:"先月、「今月の最優先」は途中で変わりましたか", o:[["変わらない",0],["1回",1.5],["2回以上",3]]},
+  {s:"B", q:"新しい取り組みを始めるとき", o:[["やめることを決めてから始める",0],["決めずに積み上がっていく",3]]},
+  {s:"B", q:"社員は「いま会社で一番大事なこと」を、社長と同じ言葉で言えそうですか", o:[["言える",0],["怪しい",1.5],["言えない",3]]},
+  {s:"B", q:"半年前に始めた取り組みは、いま", o:[["ほぼ残っている",0],["半分くらい残っている",1.5],["何を始めたか思い出せない",3]]},
+  {s:"B", q:"方針が変わったとき、現場への説明は", o:[["理由まで伝えている",0],["結論だけ伝えている",1.5],["伝わっているか分からない",3]]},
+  {s:"C", q:"この1年で決めたルールのうち、いまも続いているのは", o:[["ほぼ全部",0],["半分くらい",1.5],["ほぼ消えた",3]]},
+  {s:"C", q:"マニュアルや手順書が最後に更新されたのは", o:[["半年以内",0],["1年以上前",1.5],["そもそも無い",3]]},
+  {s:"C", q:"ルールが続かなかったとき", o:[["理由を確かめた",0],["忙しくて流れた",3]]},
+  {s:"C", q:"朝礼や定例の会議は", o:[["毎回やっている",0],["あるが、形だけになっている",1.5],["自然に消えた",3]]},
+  {s:"C", q:"会社の決めごとは、どこに残っていますか", o:[["決まった置き場所がある",0],["チャットや口頭に散らばっている",3]]},
+  {s:"D", q:"「この仕事はあの人しかできない」は、社内に何個ありますか", o:[["ゼロ",0],["1〜2個",1.5],["3個以上",3]]},
+  {s:"D", q:"その人が1週間入院したら、その仕事は", o:[["問題なく回る",0],["遅れるが回る",1.5],["止まる",3]]},
+  {s:"D", q:"新人に仕事を教えるのは", o:[["手順書がある",0],["先輩がその都度、口頭で",3]]},
+  {s:"D", q:"仕事を任せたあとは", o:[["完了まで口を出さない",0],["途中で気になって見てしまう",1.5],["結局、引き取ってしまう",3]]},
+  {s:"D", q:"「自分でやったほうが速い」と思うことは", o:[["ほぼない",0],["たまにある",1.5],["毎日ある",3]]},
+  {s:"E", q:"契約したのに使っていないツールの月額はありますか", o:[["ない",0],["あるかもしれない",1.5],["ある",3]]},
+  {s:"E", q:"過去に入れた道具で、いま誰も開いていないものは", o:[["ない",0],["1つある",1.5],["複数ある",3]]},
+  {s:"E", q:"道具を入れる前に、その業務の手順を紙に書き出したことは", o:[["ある",0],["ない",3]]},
+  {s:"E", q:"いま会社で使っている道具（ツール・システム）の数を", o:[["把握している",0],["たぶん把握している",1.5],["分からない",3]]},
+  {s:"E", q:"道具を選ぶときの決め手は", o:[["自社の業務に合うかどうか",0],["評判や流行",3]]},
+  {s:"F", q:"何かを変えるとき、別の場所の仕事が増えないかを", o:[["考えてから変える",0],["変えてから気づく",3]]},
+  {s:"F", q:"改善したのに、前より忙しくなったことは", o:[["ない",0],["ある",1.5],["いま、まさにそれ",3]]},
+  {s:"F", q:"改善したあと、効果を数字で確かめたことは", o:[["ある",0],["ない",3]]},
+  {s:"F", q:"1つの業務を変えたら、別の部署から不満が出たことは", o:[["ない",0],["ある",1.5],["よくある",3]]},
+  {s:"F", q:"「前のやり方に戻そう」となったことは", o:[["ない",0],["1回ある",1.5],["何度もある",3]]}
+];
+const SECMAX = {A:15,B:15,C:15,D:15,E:15,F:15};
+
+const TYPES = {
+  A:{name:"全部、社長に戻ってくる型",
+     desc:"確認が社長に集まるのは、社員の能力の問題ではありません。判断の基準が、まだ言葉になっていないからです。基準が社長の頭の中にしかない限り、現場は聞くしかありません。逆に言えば、基準が言葉になった瞬間に、渡せるものが一気に増えます。",
+     step:"<b>今日からの一歩：</b>来た「これでいいですか」を3種類に分けてメモする。①手順を知らないだけ ②基準がなくて聞くしかない ③本当に社長の判断。1週間で、言葉にすべき基準の在庫リストができます。"},
+  B:{name:"今週の最優先が、毎週変わる型",
+     desc:"方針が動くのは、考え続けている証拠です。ただ、現場には「また変わるかもしれない」が積もり、様子見が増えます。問題は変えることではなく、やめることを決めずに足すことです。足し算だけの方針転換は、現場の仕事を静かに増やします。",
+     step:"<b>今日からの一歩：</b>今月「やらないこと」を1つ決めて、次の朝礼でそのまま伝える。何をやるかより先に、何をやらないかが方針です。"},
+  C:{name:"決めたのに、三日で消える型",
+     desc:"ルールが消えるのは、意志の弱さではありません。見直す時間が予定に入っていないからです。決めた瞬間がやる気のピークで、あとは薄れていく。仕組みで支えない限り、それが自然な姿です。",
+     step:"<b>今日からの一歩：</b>残したいルールを1つだけ選び、週1回5分の見直しを予定表に入れる。全部を守ろうとしないことが、続けるコツです。"},
+  D:{name:"あの人がいないと、止まる型",
+     desc:"「あの人しかできない」は、その人が優秀だという話であると同時に、その人が休めない会社だという話でもあります。そして、倒れてから書く手順書は間に合いません。属人化は、順調なうちにしかほどけません。",
+     step:"<b>今日からの一歩：</b>「あの人しかできない」仕事を1つ選び、本人に手順を10行だけ書いてもらう。完璧は求めない。10行あれば、次の一歩が見えます。"},
+  E:{name:"道具から入って、棚に眠る型",
+     desc:"道具は悪くありません。順番が逆なだけです。業務が整理されていないところに道具を足すと、現場には覚えることが1つ増えて終わります。先に業務を整理すれば、要る道具は自然に絞れます。",
+     step:"<b>今日からの一歩：</b>使っていない月額をひとつ解約する。次の道具は、その業務の手順を紙に書き出してから選び直す。"},
+  F:{name:"直したのに、忙しくなる型",
+     desc:"マイナス1を目指したはずが、別の場所で工数が2つ増えて、結局プラス2。改善したのに忙しくなる会社の典型です。原因は、変える前に連鎖を読んでいないこと。詰まりは消えません。隣に移動します。だから、外す順番が要ります。",
+     step:"<b>今日からの一歩：</b>次に変える予定のものについて、「これで増える仕事」を先に3つ書き出してみる。3つ書けないなら、まだ変えないほうが安全です。"}
+};
+
 /* ── 状態 ── */
 let picked = [];      // 選ばれた JOBS の index
 let cursor = 0;       // いま何個目の詳細か
 const ans = {};       // {jobIndex: {h:時間, w:任せやすさ}}
-let phase = "intro";  // intro / pick / detail / res
+let deepIdx = 0;      // 深掘りの現在問
+const deepAns = [];   // 各問のスコア
+let deepDone = false;
+let phase = "intro";  // intro / pick / detail / mid / deep / res
 
 const $ = s => document.querySelector(s);
 const bar = $("#bar"), barIn = $("#barIn");
@@ -312,28 +448,36 @@ JOBS.forEach((j,i)=>{
 
 /* ── 進捗 ── */
 function setProg(){
-  if(phase==="intro"||phase==="res"){ $("#prog").classList.add("hidden"); return; }
+  if(phase==="intro"||phase==="res"||phase==="mid"){ $("#prog").classList.add("hidden"); return; }
   $("#prog").classList.remove("hidden");
   if(phase==="pick"){
-    // STEP1は「選ぶ」段階。問数に数えず、進捗は控えめに見せる
     $("#pnum").textContent = "STEP 1　選ぶ";
     $("#ppct").textContent = "";
     $("#pfill").style.width = "8%";
     return;
   }
-  const total = picked.length;
-  const now = cursor + 1;
-  const pct = Math.round(now/total*100);
-  $("#pnum").textContent = now + " / " + total;
-  $("#ppct").textContent = pct + "%";
-  $("#pfill").style.width = pct + "%";
+  if(phase==="detail"){
+    const total = picked.length;
+    const now = cursor + 1;
+    const pct = Math.round(now/total*100);
+    $("#pnum").textContent = now + " / " + total;
+    $("#ppct").textContent = pct + "%";
+    $("#pfill").style.width = pct + "%";
+    return;
+  }
+  if(phase==="deep"){
+    const pct = Math.round((deepIdx+1)/DEEP.length*100);
+    $("#pnum").textContent = "深掘り " + (deepIdx+1) + " / " + DEEP.length;
+    $("#ppct").textContent = pct + "%";
+    $("#pfill").style.width = pct + "%";
+  }
 }
 
 /* ── 下部バー ── */
 function renderBar(){
   bar.classList.remove("hidden");
   if(phase==="intro"){
-    barIn.innerHTML = '<button class="btn" id="go">はじめる（5分）</button>';
+    barIn.innerHTML = '<button class="btn" id="go">はじめる（まず5分）</button>';
     $("#go").onclick = ()=>{ phase="pick"; show(); };
   }
   else if(phase==="pick"){
@@ -346,26 +490,45 @@ function renderBar(){
     const last = cursor === picked.length-1;
     barIn.innerHTML =
       '<button class="btn ghost" id="bk">戻る</button>' +
-      '<button class="btn" id="nx" '+(ok?'':'disabled')+'>'+(last?'結果を見る':'次へ')+'</button>';
+      '<button class="btn" id="nx" '+(ok?'':'disabled')+'>'+(last?'ここまでの結果':'次へ')+'</button>';
     $("#bk").onclick = ()=>{
       if(cursor===0){ phase="pick"; } else { cursor--; }
       show();
     };
     if(ok) $("#nx").onclick = ()=>{
-      if(last){ phase="res"; calc(); } else { cursor++; }
+      if(last){ phase="mid"; midCalc(); } else { cursor++; }
       show();
     };
   }
+  else if(phase==="mid"){
+    barIn.innerHTML =
+      '<button class="btn ghost wide" id="skip">結果だけ見る</button>' +
+      '<button class="btn" id="deep">深掘りする（10分）</button>';
+    $("#skip").onclick = ()=>{ phase="res"; calc(); show(); };
+    $("#deep").onclick = ()=>{ phase="deep"; deepIdx = deepAns.length; if(deepIdx>=DEEP.length) deepIdx=DEEP.length-1; show(); };
+  }
+  else if(phase==="deep"){
+    barIn.innerHTML =
+      '<button class="btn ghost" id="bk">戻る</button>' +
+      '<button class="btn ghost wide" id="quit">中断して結果へ</button>';
+    $("#bk").onclick = ()=>{
+      if(deepIdx===0){ phase="mid"; } else { deepIdx--; deepAns.length = deepIdx; }
+      show();
+    };
+    $("#quit").onclick = ()=>{ deepDone = deepAns.length===DEEP.length; phase="res"; calc(); show(); };
+  }
   else if(phase==="res"){
-    if(LIFF_ID && window.liff && liff.isInClient && liff.isInClient()){
-      barIn.innerHTML = '<button class="btn ghost" id="bk">戻る</button><button class="btn acc" id="send">この結果をLINEに送る</button>';
-      $("#bk").onclick = ()=>{ phase="detail"; cursor=picked.length-1; show(); };
-      $("#send").onclick = sendToLine;
-    } else {
-      barIn.innerHTML = '<button class="btn ghost" id="bk">戻る</button><button class="btn" id="cp">結果をコピーする</button>';
-      $("#bk").onclick = ()=>{ phase="detail"; cursor=picked.length-1; show(); };
-      $("#cp").onclick = copyResult;
-    }
+    let html = '<button class="btn ghost" id="cp">コピー</button>';
+    if(!deepDone) html += '<button class="btn" id="godeep">深掘りする（10分）</button>';
+    else if(LIFF_ID && window.liff && liff.isInClient && liff.isInClient())
+      html += '<button class="btn acc" id="send">この結果をLINEに送る</button>';
+    else
+      html += '<button class="btn line" id="goline">LINEで相談する</button>';
+    barIn.innerHTML = html;
+    $("#cp").onclick = copyResult;
+    if($("#godeep")) $("#godeep").onclick = ()=>{ phase="deep"; deepIdx = deepAns.length; if(deepIdx>=DEEP.length) deepIdx=0; show(); };
+    if($("#send")) $("#send").onclick = sendToLine;
+    if($("#goline")) $("#goline").onclick = ()=>{ window.open("https://line.me/R/ti/p/%40210uvwaj","_blank"); };
   }
 }
 
@@ -398,9 +561,8 @@ function renderDetail(){
         g.querySelectorAll(".opt").forEach(x=>x.classList.remove("on"));
         o.classList.add("on");
         ans[i][key] = parseFloat(o.dataset.v);
-        if(key==="h") ans[i].hLabel = o.dataset.label;   // 表示は選ばれた言葉をそのまま使う
+        if(key==="h") ans[i].hLabel = o.dataset.label;
         renderBar();
-        // 時間を選んだら、2問目が画面に入るまで自動で送る（縦に長いので見落とされる）
         if(key==="h" && ans[i].w===undefined){
           const t = document.getElementById("sq2");
           if(t) setTimeout(()=>t.scrollIntoView({behavior:"smooth",block:"start"}), 130);
@@ -410,17 +572,61 @@ function renderDetail(){
   });
 }
 
+/* ── 深掘りカードを描く ── */
+function renderDeep(){
+  const d = DEEP[deepIdx];
+  $("#deepLabel").textContent = "深掘り ／ " + SECS[d.s];
+  $("#deepTitle").classList.add("hidden");
+  let html = '<div class="deepcard"><div class="sec">'+SECS[d.s]+'</div><div class="dq">'+d.q+'</div><div class="opts">';
+  d.o.forEach((o,k)=>{
+    html += '<div class="opt" data-k="'+k+'">'+o[0]+'<span class="tick">✓</span></div>';
+  });
+  html += '</div></div>';
+  $("#deepCard").innerHTML = html;
+  $("#deepCard").querySelectorAll(".opt").forEach(el=>{
+    el.onclick = ()=>{
+      el.classList.add("on");
+      deepAns[deepIdx] = DEEP[deepIdx].o[el.dataset.k][1];
+      setTimeout(()=>{
+        if(deepIdx === DEEP.length-1){
+          deepDone = true; phase="res"; calc();
+        } else {
+          deepIdx++;
+        }
+        show();
+      }, 180);
+    };
+  });
+}
+
 /* ── 画面切り替え ── */
 function show(){
-  ["intro","pick","detail","res"].forEach(k=>{
+  ["intro","pick","detail","mid","deep","res"].forEach(k=>{
     $("#s-"+k).classList.toggle("hidden", k!==phase);
   });
   if(phase==="detail") renderDetail();
+  if(phase==="deep") renderDeep();
   setProg(); renderBar();
   window.scrollTo({top:0,behavior:"instant"});
 }
 
-/* ── 計算 ── */
+/* ── 中間結果 ── */
+function midCalc(){
+  const rows = picked.map(i=>({ free: ans[i].h * ans[i].w }));
+  const total = Math.round(rows.reduce((s,r)=>s+r.free,0));
+  $("#mHours").innerHTML = total + '<span>時間/月</span>';
+  $("#mCap").textContent = picked.length + "つ選ばれました。うち手放せるぶんの合計です。";
+  $("#mYear").innerHTML = yearLine(total);
+}
+
+function yearLine(total){
+  const y = total*12;
+  const days = Math.round(y/8);
+  if(total<=0) return "";
+  return "年に換算すると <b>" + y + "時間</b>。営業日にして<b>約" + days + "日分</b>の時間です。";
+}
+
+/* ── 計算・結果 ── */
 let resultText = "";
 function calc(){
   const rows = picked.map(i=>({
@@ -433,9 +639,38 @@ function calc(){
 
   $("#rHours").innerHTML = total + '<span>時間/月</span>';
   $("#rCap").textContent = picked.length + "つ選ばれました。うち手放せるぶんの合計です。";
+  $("#rYear").innerHTML = yearLine(total);
+
+  /* タイプ判定 */
+  const lines = ["【詰まりリスト 診断書】", "手放せる時間：月" + total + "時間（年" + total*12 + "時間）"];
+  if(deepDone){
+    const secScore = {A:0,B:0,C:0,D:0,E:0,F:0};
+    DEEP.forEach((d,k)=>{ secScore[d.s] += (deepAns[k]||0); });
+    const ratios = Object.keys(secScore).map(s=>({s, r:secScore[s]/SECMAX[s]}));
+    ratios.sort((a,b)=>b.r-a.r);
+    const top = ratios[0], second = ratios[1];
+    $("#rTypeBox").classList.remove("hidden");
+    $("#rDeepInvite").classList.add("hidden");
+    if(top.r < 0.34){
+      $("#rType").textContent = "大きな詰まりは、見当たりません";
+      $("#rType2nd").textContent = "";
+      $("#rTypeDesc").innerHTML = "6つの根っこ（判断・方針・定着・属人化・道具・連鎖）のどれも、濃くは出ませんでした。いまは仕組みが回っている状態です。この状態のうちに手順を残しておくと、人が増えても崩れません。";
+      $("#rTypeStep").innerHTML = "<b>今日からの一歩：</b>いちばん頻度の高い仕事の手順を、10行だけ書き出しておく。";
+      lines.push("詰まりタイプ：大きな詰まりなし");
+    } else {
+      const T = TYPES[top.s];
+      $("#rType").textContent = T.name;
+      $("#rType2nd").textContent = (second.r >= 0.5) ? "併発ぎみ：" + TYPES[second.s].name : "";
+      $("#rTypeDesc").innerHTML = T.desc;
+      $("#rTypeStep").innerHTML = T.step;
+      lines.push("詰まりタイプ：" + T.name + (second.r>=0.5 ? "（併発ぎみ：" + TYPES[second.s].name + "）" : ""));
+    }
+  } else {
+    $("#rTypeBox").classList.add("hidden");
+    $("#rDeepInvite").classList.remove("hidden");
+  }
 
   // 「社長がやるしかない（判断が要る）」ものは、外す候補にしない。
-  // 外せないと答えたものを「外しましょう」と言うのは矛盾する。
   const movable = rows.filter(r=>r.w>=0.6);
   const ol = $("#rOrder"); ol.innerHTML = "";
 
@@ -444,7 +679,7 @@ function calc(){
     $("#rCap").textContent = "いま外せる仕事は見つかりませんでした。";
     $("#rFirst").textContent = "判断の基準を、言葉にする";
     $("#rFirstWhy").innerHTML =
-      "選ばれた仕事は、すべて<b>「社長がやるしかない（判断が要る）」</b>とお答えになりました。<br>" +
+      "選ばれた仕事は、すべて<b>「社長がやるしかない（判断が要る）」</b>という回答でした。<br>" +
       "この状態では、外す前にやることがあります。<b>判断の基準を、言葉にして残すことです。</b>" +
       "基準が残れば、同じ判断を他の人ができるようになります。";
     $("#rChain").innerHTML =
@@ -452,20 +687,18 @@ function calc(){
     const li = document.createElement("li");
     li.innerHTML = '<span>判断の基準を言葉にする</span>';
     ol.appendChild(li);
-    resultText = ["【詰まりリストの結果】",
-      "手放せる時間：月" + total + "時間",
-      "いま外せる仕事：なし（すべて「社長がやるしかない」）",
-      "最初にやること：判断の基準を言葉にして残す"].join("\n");
+    lines.push("いま外せる仕事：なし（すべて「社長がやるしかない」）","最初にやること：判断の基準を言葉にして残す");
+    resultText = lines.join("\n");
     return;
   }
 
-  const top = movable[0];
+  const top1 = movable[0];
   $("#rFirstLbl").textContent = "最初に外す、たった1つ";
-  $("#rFirst").textContent = top.name;
-  $("#rFirstWhy").innerHTML = "「" + top.hLabel + "」かかっていて、" +
-    (top.w>=1 ? "もう任せられる状態です。" : "手順さえあれば任せられます。") +
-    "<br><b>ここを外すと、月およそ" + Math.round(top.free) + "時間が戻ります。</b>";
-  $("#rChain").innerHTML = top.chain;
+  $("#rFirst").textContent = top1.name;
+  $("#rFirstWhy").innerHTML = "「" + top1.hLabel + "」かかっていて、" +
+    (top1.w>=1 ? "もう任せられる状態です。" : "手順さえあれば任せられます。") +
+    "<br><b>ここを外すと、月およそ" + Math.round(top1.free) + "時間が戻ります。</b>";
+  $("#rChain").innerHTML = top1.chain;
 
   movable.slice(0,5).forEach(r=>{
     const li = document.createElement("li");
@@ -481,11 +714,7 @@ function calc(){
     ol.appendChild(li);
   }
 
-  const lines = ["【詰まりリストの結果】",
-    "手放せる時間：月" + total + "時間",
-    "最初に外す：" + top.name + "（月" + Math.round(top.free) + "時間）",
-    "",
-    "外す順番："];
+  lines.push("最初に外す：" + top1.name + "（月" + Math.round(top1.free) + "時間）", "", "外す順番：");
   movable.slice(0,5).forEach((r,k)=> lines.push((k+1)+". "+r.name+"（月"+Math.round(r.free)+"時間）"));
   if(stay.length) lines.push("", "外さない（判断が要る）：" + stay.map(r=>r.name).join("、"));
   resultText = lines.join("\n");
@@ -508,7 +737,7 @@ async function sendToLine(){
 /* ── コピー ── */
 function copyResult(){
   const b = $("#cp");
-  const done = ()=>{ b.textContent = "コピーしました"; setTimeout(()=>b.textContent="結果をコピーする",1800); };
+  const done = ()=>{ b.textContent = "済み"; setTimeout(()=>b.textContent="コピー",1800); };
   if(navigator.clipboard && window.isSecureContext){
     navigator.clipboard.writeText(resultText).then(done).catch(fallback);
   } else fallback();
