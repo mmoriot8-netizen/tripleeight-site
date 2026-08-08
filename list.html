@@ -14,7 +14,7 @@
   --line:#dfe3e8;
   --text:#1a1d21;
   --muted:#6c7480;
-  --lineg:#06C755;
+  --lineg:#001743;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
@@ -305,12 +305,14 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
       <p>診断で、詰まっている場所は見えました。次の工程は<span class="strong">「判断の基準を言葉にする」</span>——ここが、一人でやると一番止まりやすいところです。<br><br>
       この診断書を持って、オンラインで30分、お話しできます。<span class="strong">売り込みはしません。</span>順番の相談だけでも構いません。</p>
       <a class="linebtn" id="lineBtn" href="https://line.me/R/ti/p/%40210uvwaj" target="_blank" rel="noopener">公式LINEで、この結果を相談する</a>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center">毎月第2・第4日曜の「AIセットアップ会」のご案内も、公式LINEから届きます。</p>
     </div>
   </section>
 
   <p class="foot">
     TripleEight（トリプルエイト）<br>
-    時間を、産む。
+    言葉になっていない困りごとを、形にする。<br>
+    社長の時間を、利益に変える。
   </p>
 </div>
 
@@ -518,7 +520,7 @@ function renderBar(){
     $("#quit").onclick = ()=>{ deepDone = deepAns.length===DEEP.length; phase="res"; calc(); show(); };
   }
   else if(phase==="res"){
-    let html = '<button class="btn ghost" id="cp">コピー</button>';
+    let html = '<button class="btn ghost" id="cp">結果をコピー</button>';
     if(!deepDone) html += '<button class="btn" id="godeep">深掘りする（10分）</button>';
     else if(LIFF_ID && window.liff && liff.isInClient && liff.isInClient())
       html += '<button class="btn acc" id="send">この結果をLINEに送る</button>';
@@ -737,7 +739,7 @@ async function sendToLine(){
 /* ── コピー ── */
 function copyResult(){
   const b = $("#cp");
-  const done = ()=>{ b.textContent = "済み"; setTimeout(()=>b.textContent="コピー",1800); };
+  const done = ()=>{ b.textContent = "済み"; setTimeout(()=>b.textContent="結果をコピー",1800); };
   if(navigator.clipboard && window.isSecureContext){
     navigator.clipboard.writeText(resultText).then(done).catch(fallback);
   } else fallback();
