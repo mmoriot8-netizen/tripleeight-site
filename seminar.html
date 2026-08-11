@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AIセットアップ会 申込｜TripleEight</title>
+<meta name="description" content="あなたの手元に、AIの相棒を作って持ち帰る会。毎月第2・第4日曜開催。申込は1分で完了します。">
+<style>
+:root{
+  --main:#001743;
+  --accent:#d6aaa7;
+  --bg:#f4f6f9;
+  --card:#fff;
+  --line:#dfe3e8;
+  --text:#1a1d21;
+  --muted:#6c7480;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.75;
+  -webkit-font-smoothing:antialiased;padding-bottom:60px;
+}
+.wrap{max-width:620px;margin:0 auto;padding:0 16px}
+.head{background:var(--main);color:#fff;padding:30px 0 26px;text-align:center}
+.head .brand{font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--accent);margin-bottom:10px}
+.head h1{font-size:22px;font-weight:800;line-height:1.5}
+.head p{font-size:13.5px;opacity:.85;margin-top:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin-top:16px}
+.card h2{font-size:15px;font-weight:800;color:var(--main);margin-bottom:12px}
+.specs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.spec{background:#fff;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:12.5px;font-weight:700}
+.spec b{color:var(--main)}
+label.q{display:block;font-size:14px;font-weight:800;margin:18px 0 8px}
+label.q small{font-weight:600;color:var(--muted)}
+select,input[type=text],textarea{
+  width:100%;font-size:16px;padding:13px 14px;border:1.5px solid var(--line);
+  border-radius:10px;background:#fff;color:var(--text);appearance:none;font-family:inherit;
+}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--main)}
+.radio{display:block;border:1.5px solid var(--line);border-radius:10px;padding:13px 14px;margin-bottom:8px;font-size:14.5px;font-weight:700;cursor:pointer;background:#fff}
+.radio input{margin-right:9px;accent-color:var(--main)}
+.radio.on{border-color:var(--main);background:#f6f8fc}
+.radio small{display:block;font-weight:600;color:var(--muted);font-size:12.5px;margin-top:2px;padding-left:24px}
+.btn{
+  display:block;width:100%;text-align:center;background:#06c755;color:#fff;
+  font-size:16.5px;font-weight:800;padding:16px;border:none;border-radius:12px;
+  margin-top:22px;cursor:pointer;font-family:inherit;
+}
+.btn:disabled{opacity:.45}
+.btn small{display:block;font-size:12px;font-weight:700;opacity:.9;margin-top:2px}
+.hint{font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center}
+.err{color:#c7000b;font-size:13px;font-weight:700;margin-top:10px;display:none;text-align:center}
+.foot{margin-top:30px;text-align:center;font-size:12.5px;color:var(--muted)}
+.foot b{color:var(--main)}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="wrap">
+    <div class="brand">TRIPLEEIGHT</div>
+    <h1>AIセットアップ会 申込</h1>
+    <p>あなたの手元に、AIの相棒を作って持ち帰る会</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="card">
+    <h2>開催概要</h2>
+    <p style="font-size:14px">毎月<b>第2・第4日曜</b>に開催しています（初回は8月23日）。座学1時間＋一緒にセットアップ2時間。ノートPCをお持ちください。</p>
+    <div class="specs">
+      <span class="spec">午前 <b>9:00〜12:00</b></span>
+      <span class="spec">午後 <b>14:00〜17:00</b></span>
+      <span class="spec">場所 <b>都内近郊</b></span>
+      <span class="spec">定員 <b>各回10名</b></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>申込フォーム（1分）</h2>
+
+    <label class="q" for="day">希望日</label>
+    <select id="day">
+      <option value="">選んでください</option>
+      <option>8月23日（日）※初回</option>
+      <option>9月13日（日）</option>
+      <option>9月27日（日）</option>
+      <option>未定（日程を相談したい）</option>
+    </select>
+
+    <label class="q">時間帯</label>
+    <label class="radio"><input type="radio" name="slot" value="午前 9:00〜12:00">午前 9:00〜12:00</label>
+    <label class="radio"><input type="radio" name="slot" value="午後 14:00〜17:00">午後 14:00〜17:00</label>
+
+    <label class="q" for="name">お名前</label>
+    <input type="text" id="name" placeholder="例：山田 太郎" autocomplete="name">
+
+    <label class="q">参加費</label>
+    <label class="radio"><input type="radio" name="fee" value="コメント無料（Brain記事にコメントを書く／書いた）">Brain記事にコメントを書く → <b>無料</b><small>教材（2,980円）の記事にレビューを書いた方は参加費無料です</small></label>
+    <label class="radio"><input type="radio" name="fee" value="通常参加 5,000円（事前振込）">通常参加 5,000円<small>事前振込。お振込先は受付後にご案内します</small></label>
+
+    <label class="q" for="memo">ひとこと <small>（任意）</small></label>
+    <textarea id="memo" rows="2" placeholder="例：Claudeを入れたが何もできていない、など"></textarea>
+
+    <button class="btn" id="send">LINEで申し込む<small>内容が自動で入力されます。送信して完了です</small></button>
+    <p class="err" id="err">希望日・時間帯・お名前・参加費を選んでください</p>
+    <p class="hint">ボタンを押すとLINEが開きます。内容を確認して送信してください。</p>
+  </div>
+
+  <div class="foot">
+    <b>TripleEight</b>｜河村杜永（もりお）<br>社長の時間を、利益に変える。
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.radio input').forEach(r=>{
+  r.addEventListener('change',()=>{
+    document.querySelectorAll('input[name="'+r.name+'"]').forEach(x=>x.closest('.radio').classList.toggle('on',x.checked));
+  });
+});
+document.getElementById('send').addEventListener('click',()=>{
+  const day = document.getElementById('day').value;
+  const slot = (document.querySelector('input[name=slot]:checked')||{}).value;
+  const name = document.getElementById('name').value.trim();
+  const fee = (document.querySelector('input[name=fee]:checked')||{}).value;
+  const memo = document.getElementById('memo').value.trim();
+  const err = document.getElementById('err');
+  if(!day || !slot || !name || !fee){ err.style.display='block'; return; }
+  err.style.display='none';
+  const text = '【セットアップ会 参加希望】\n'
+    + '希望日：' + day + '\n'
+    + '時間帯：' + slot + '\n'
+    + 'お名前：' + name + '\n'
+    + '参加費：' + fee
+    + (memo ? '\nひとこと：' + memo : '');
+  location.href = 'https://line.me/R/oaMessage/%40210uvwaj/?' + encodeURIComponent(text);
+});
+</script>
+</body>
+</html>
