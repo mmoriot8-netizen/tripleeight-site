@@ -1,0 +1,138 @@
+/* ============================================================
+   TripleEight ── 申込・相談ページ共通スタイル
+   ============================================================ */
+:root{
+  --navy:#001743;
+  --ink:#14181d;
+  --pink:#c98a86;
+  --paper:#faf9f7;
+  --line:#e4e1db;
+  --muted:#6b6f76;
+  --line-green:#06c755;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium","Yu Gothic",sans-serif;
+  background:var(--paper);color:var(--ink);
+  line-height:1.85;font-size:15px;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:56px;
+}
+.wrap{max-width:640px;margin:0 auto;padding:0 22px}
+.hidden{display:none!important}
+
+/* ── ロゴ ── */
+.logobar{background:#fff;padding:22px 0 20px;text-align:center;border-bottom:1px solid var(--line)}
+.logobar img{display:block;height:78px;margin:0 auto}
+@media(max-width:400px){.logobar img{height:62px}}
+
+/* ── 見出し帯 ── */
+.hero{background:var(--navy);color:#fff;padding:38px 0 34px}
+.hero .eyebrow{
+  font-size:11px;font-weight:800;letter-spacing:.22em;color:var(--pink);
+  margin-bottom:14px;
+}
+.hero h1{font-size:27px;font-weight:800;line-height:1.45;letter-spacing:-.01em}
+@media(max-width:400px){.hero h1{font-size:23px}}
+.hero .rule{width:46px;height:2px;background:var(--pink);margin:18px 0 16px}
+.hero p{font-size:14.5px;line-height:1.8;opacity:.92}
+
+/* ── 本文ブロック ── */
+.block{padding:34px 0;border-bottom:1px solid var(--line)}
+.block:last-of-type{border-bottom:none}
+.block > h2{
+  font-size:13px;font-weight:800;color:var(--navy);letter-spacing:.04em;
+  padding-left:12px;border-left:3px solid var(--pink);margin-bottom:16px;line-height:1.5;
+}
+.block p + p{margin-top:14px}
+.lead{font-size:15.5px;line-height:1.9}
+.sign{margin-top:20px;font-size:13px;color:var(--muted);line-height:1.7}
+.sign b{color:var(--navy);font-weight:800}
+
+/* ── 事業の2本柱 ── */
+.pillars{display:grid;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:6px}
+.pillar{background:#fff;padding:18px 18px 16px}
+.pillar b{display:block;font-size:14.5px;color:var(--navy);font-weight:800;margin-bottom:4px}
+.pillar span{font-size:13.5px;color:var(--muted);line-height:1.75}
+
+/* ── 当日の流れ ── */
+.flow{list-style:none;counter-reset:f}
+.flow li{
+  counter-increment:f;position:relative;padding:14px 0 14px 46px;
+  font-size:14.5px;border-top:1px solid var(--line);line-height:1.7;
+}
+.flow li:first-child{border-top:none}
+.flow li::before{
+  content:counter(f,decimal-leading-zero);position:absolute;left:0;top:14px;
+  font-size:13px;font-weight:800;color:var(--pink);letter-spacing:.05em;
+}
+.flow li b{color:var(--navy)}
+.flow li em{display:block;font-style:normal;font-size:12.5px;color:var(--muted);margin-top:2px}
+
+/* ── 開催情報 ── */
+.facts{border-top:1px solid var(--line);margin-top:20px}
+.facts div{display:flex;gap:14px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
+.facts dt,.facts .k{flex:0 0 84px;font-weight:800;color:var(--muted);font-size:12.5px;padding-top:2px}
+.facts .v b{color:var(--navy)}
+
+/* ── フォーム ── */
+.field{margin-top:22px}
+.field:first-of-type{margin-top:6px}
+.field > label,.qlabel{
+  display:block;font-size:13.5px;font-weight:800;margin-bottom:7px;line-height:1.6;
+}
+.req{
+  display:inline-block;background:var(--navy);color:#fff;font-size:10px;font-weight:800;
+  padding:1px 6px;border-radius:2px;margin-left:7px;vertical-align:1.5px;letter-spacing:.04em;
+}
+.opt{font-size:11.5px;color:var(--muted);font-weight:600;margin-left:6px}
+.help{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.65}
+input[type=text],input[type=tel],input[type=email],select,textarea{
+  width:100%;font-size:16px;font-family:inherit;color:var(--ink);
+  padding:13px 14px;border:1px solid #cfccc6;border-radius:5px;background:#fff;
+  appearance:none;line-height:1.6;
+}
+select{
+  background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%23001743' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;background-size:12px;padding-right:38px;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(0,23,67,.09)}
+.pick{
+  display:block;border:1px solid #cfccc6;border-radius:5px;padding:13px 14px;
+  margin-bottom:8px;font-size:14.5px;font-weight:700;background:#fff;cursor:pointer;line-height:1.6;
+}
+.pick input{margin-right:9px;accent-color:var(--navy)}
+.pick.on{border-color:var(--navy);background:#f4f6fa;box-shadow:inset 0 0 0 1px var(--navy)}
+.pick small{display:block;font-weight:500;color:var(--muted);font-size:12.5px;margin-top:3px;padding-left:23px;line-height:1.65}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{
+  border:1px solid #cfccc6;border-radius:3px;padding:9px 14px;
+  font-size:13.5px;font-weight:700;background:#fff;cursor:pointer;line-height:1.4;
+}
+.chip input{display:none}
+.chip.on{border-color:var(--navy);background:var(--navy);color:#fff}
+
+/* ── 送信 ── */
+.submit{
+  display:block;width:100%;text-align:center;background:var(--line-green);color:#fff;
+  font-size:16.5px;font-weight:800;padding:17px;border:none;border-radius:6px;
+  margin-top:30px;cursor:pointer;font-family:inherit;line-height:1.5;
+}
+.submit:active{opacity:.85}
+.submit small{display:block;font-size:12px;font-weight:600;opacity:.94;margin-top:3px}
+.aftersend{font-size:13px;color:var(--muted);margin-top:12px;line-height:1.75}
+.formerr{
+  display:none;background:#fdf2f2;border-left:3px solid #c7000b;color:#c7000b;
+  font-size:13.5px;font-weight:700;padding:12px 14px;margin-top:14px;line-height:1.6;
+}
+
+/* ── 送信完了 ── */
+.done{display:none;text-align:center;padding:44px 0}
+.done .mark{font-size:34px;color:var(--line-green);font-weight:800}
+.done h2{font-size:19px;font-weight:800;color:var(--navy);margin:12px 0 8px}
+.done p{font-size:14px;color:var(--muted);line-height:1.85}
+
+/* ── フッター ── */
+.foot{padding:30px 0 10px;text-align:center;font-size:12.5px;color:var(--muted);line-height:1.9}
+.foot b{color:var(--navy);font-weight:800}

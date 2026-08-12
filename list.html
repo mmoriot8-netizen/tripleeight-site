@@ -27,8 +27,9 @@ body{
 .hidden{display:none!important}
 
 /* ── ロゴヘッダー ── */
-.logobar{background:#fff;border-bottom:1px solid var(--line);padding:14px 0}
-.logobar img{display:block;height:44px;margin:0 auto}
+.logobar{background:#fff;border-bottom:1px solid var(--line);padding:22px 0 20px}
+.logobar img{display:block;height:78px;margin:0 auto}
+@media(max-width:400px){.logobar img{height:62px}}
 
 /* ── 冒頭の入力 ── */
 .entry{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;text-align:left;margin-bottom:14px}
@@ -363,11 +364,12 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
 <!-- LIFF SDK。LINE公式が案内している読み込み方。
      ※このURLはLINE側で随時更新されるため integrity（SRI）は付けない。付けると更新の瞬間に動かなくなる。 -->
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script src="send.js"></script>
 <script>
 /* ══════════════════════════════════════════
    設定：LIFF ID が入ると「LINEに送る」が出ます
    ══════════════════════════════════════════ */
-const LIFF_ID = "";   // ← LINE Developers で発行後にここへ
+const LIFF_ID = window.TE_LIFF_ID || "";   // ← send.js の TE_LIFF_ID で一括管理
 
 /* ── 業務データ ──
    chain = これを外したあと、次に詰まりやすいところ */

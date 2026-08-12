@@ -2,208 +2,183 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" type="image/png" href="favicon.png">
-<title>AIセットアップ会 申込｜TripleEight</title>
-<meta name="description" content="自分の会社用のAIを、その日のうちに一体つくって持ち帰る会。毎月第2・第4日曜開催。申込は1分で完了します。">
-<style>
-:root{
-  --main:#001743;
-  --accent:#d6aaa7;
-  --bg:#f4f6f9;
-  --card:#fff;
-  --line:#dfe3e8;
-  --text:#1a1d21;
-  --muted:#6c7480;
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{
-  font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
-  background:var(--bg);color:var(--text);line-height:1.75;
-  -webkit-font-smoothing:antialiased;padding-bottom:60px;
-}
-.wrap{max-width:620px;margin:0 auto;padding:0 16px}
-
-/* ── ロゴヘッダー ── */
-.logobar{background:#fff;border-bottom:1px solid var(--line);padding:14px 0}
-.logobar img{display:block;height:44px;margin:0 auto}
-
-.head{background:var(--main);color:#fff;padding:30px 0 26px;text-align:center}
-.head .brand{font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--accent);margin-bottom:10px}
-.head h1{font-size:23px;font-weight:800;line-height:1.5}
-.head p{font-size:13.5px;opacity:.9;margin-top:8px}
-
-.greet{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin-top:16px;font-size:14.5px}
-.greet .sign{margin-top:14px;font-size:13px;color:var(--muted);text-align:right;line-height:1.6}
-
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin-top:16px}
-.card h2{font-size:15px;font-weight:800;color:var(--main);margin-bottom:12px}
-.card h2 small{font-weight:600;color:var(--muted);font-size:12.5px;margin-left:6px}
-.flow{list-style:none;counter-reset:f}
-.flow li{counter-increment:f;position:relative;padding:8px 0 8px 34px;font-size:14px;border-bottom:1px dashed var(--line)}
-.flow li:last-child{border-bottom:none}
-.flow li::before{content:counter(f);position:absolute;left:0;top:9px;width:23px;height:23px;border-radius:50%;background:var(--main);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
-.specs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.spec{background:#f6f8fc;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:12.5px;font-weight:700}
-.spec b{color:var(--main)}
-
-label.q{display:block;font-size:14px;font-weight:800;margin:20px 0 8px}
-label.q .req{color:#c7000b;font-size:11.5px;margin-left:6px;font-weight:800}
-label.q small{font-weight:600;color:var(--muted)}
-select,input[type=text],input[type=tel],input[type=email],textarea{
-  width:100%;font-size:16px;padding:13px 14px;border:1.5px solid var(--line);
-  border-radius:10px;background:#fff;color:var(--text);appearance:none;font-family:inherit;
-}
-select:focus,input:focus,textarea:focus{outline:none;border-color:var(--main)}
-.radio{display:block;border:1.5px solid var(--line);border-radius:10px;padding:13px 14px;margin-bottom:8px;font-size:14.5px;font-weight:700;cursor:pointer;background:#fff}
-.radio input{margin-right:9px;accent-color:var(--main)}
-.radio.on{border-color:var(--main);background:#f6f8fc}
-.radio small{display:block;font-weight:600;color:var(--muted);font-size:12.5px;margin-top:2px;padding-left:24px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1.5px solid var(--line);border-radius:99px;padding:9px 15px;font-size:13.5px;font-weight:700;background:#fff;cursor:pointer}
-.chip input{display:none}
-.chip.on{border-color:var(--main);background:#f6f8fc;color:var(--main)}
-.btn{
-  display:block;width:100%;text-align:center;background:#06c755;color:#fff;
-  font-size:16.5px;font-weight:800;padding:16px;border:none;border-radius:12px;
-  margin-top:24px;cursor:pointer;font-family:inherit;
-}
-.btn small{display:block;font-size:12px;font-weight:700;opacity:.92;margin-top:2px}
-.hint{font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center}
-.err{color:#c7000b;font-size:13px;font-weight:700;margin-top:10px;display:none;text-align:center}
-.foot{margin-top:30px;text-align:center;font-size:12.5px;color:var(--muted)}
-.foot b{color:var(--main)}
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" type="image/png" href="favicon.png">
+<title>AIセットアップ会 お申し込み｜TripleEight</title>
+<meta name="description" content="自分の会社用のAIを、その日のうちに一体つくって持ち帰る会。毎月第2・第4日曜、都内近郊で開催しています。">
+<link rel="stylesheet" href="form.css">
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script src="send.js"></script>
 </head>
 <body>
 
 <div class="logobar"><img src="thumbs/logo_lockup.jpg" alt="TripleEight"></div>
 
-<div class="head">
+<div class="hero">
   <div class="wrap">
-    <div class="brand">SEMINAR</div>
+    <div class="eyebrow">AI SETUP MEETING</div>
     <h1>AIセットアップ会</h1>
-    <p>自分の会社用のAIを、一体つくって持ち帰る日</p>
+    <div class="rule"></div>
+    <p>自分の会社用のAIを、その日のうちに一体つくって持ち帰る日。<br>毎月 第2・第4日曜、都内近郊で開いています。</p>
   </div>
 </div>
 
 <div class="wrap">
 
-  <div class="greet">
-    <p>はじめまして。業務改善・仕組み化コンサルタントの河村杜永（もりお）と申します。</p>
-    <p style="margin-top:12px">「AIがいいらしい」と聞いて入れてみたけれど、結局なにも変わらなかった——そんな声を、たくさん聞いてきました。原因はたいてい、道具ではなく<b>順番</b>です。</p>
-    <p style="margin-top:12px">この会では、座学は最小限にして、<b>あなたの会社の仕事をそのまま持ち込んでいただきます</b>。その場で一緒に手を動かし、明日から使えるAIを一体つくって、お持ち帰りいただく。それだけの会です。</p>
-    <p style="margin-top:12px">パソコンが苦手でも大丈夫です。となりで一緒に進めます。お会いできるのを楽しみにしています。</p>
-    <div class="sign">河村杜永（もりお）／TripleEight<br>言葉になっていない困りごとを、形にする。</div>
+  <div class="block">
+    <h2>はじめに</h2>
+    <p class="lead">「AIがいいらしい」と聞いて入れてみたけれど、結局なにも変わらなかった。<br>そういう話を、これまで何度も聞いてきました。</p>
+    <p>原因はたいてい、道具ではなく<b>順番</b>です。何を外すかを決めないまま道具だけ入れても、仕事は減りません。</p>
+    <p>この会では、座学は最小限にします。かわりに、<b>あなたの会社の仕事をそのまま持ち込んでください。</b>その場で一緒に手を動かして、明日から使えるAIを一体つくって、お持ち帰りいただきます。</p>
+    <p>パソコンが得意でなくても大丈夫です。となりで一緒に進めます。</p>
+    <div class="sign"><b>河村杜永（もりお）／TripleEight</b><br>業務改善・仕組み化コンサルタント<br>言葉になっていない困りごとを、形にする。</div>
   </div>
 
-  <div class="card">
-    <h2>当日の流れ<small>3時間</small></h2>
+  <div class="block">
+    <h2>当日の流れ（3時間）</h2>
     <ol class="flow">
-      <li>いまの仕事のどこが詰まっているかを、書き出す（30分）</li>
-      <li>外す順番を決める。ここがいちばん大事です（30分）</li>
-      <li>あなたの会社用のAIを、その場でつくる（90分）</li>
-      <li>明日からの使い方を決めて、持ち帰る（30分）</li>
+      <li><b>いまの仕事を、書き出す</b><em>どこで止まっているかを、目に見える形にします（30分）</em></li>
+      <li><b>外す順番を決める</b><em>ここがいちばん大事です。順番を間違えると、何も外れません（30分）</em></li>
+      <li><b>あなたの会社用のAIを、その場でつくる</b><em>一緒に手を動かします。持ち込んだ仕事がそのまま材料になります（90分）</em></li>
+      <li><b>明日からの使い方を決める</b><em>会が終わった翌日から動くように、使う場面まで決めます（30分）</em></li>
     </ol>
-    <div class="specs">
-      <span class="spec">午前 <b>9:00〜12:00</b></span>
-      <span class="spec">午後 <b>14:00〜17:00</b></span>
-      <span class="spec">場所 <b>都内近郊</b></span>
-      <span class="spec">定員 <b>各回10名</b></span>
-      <span class="spec">持ち物 <b>ノートPC</b></span>
+    <div class="facts">
+      <div><span class="k">時間</span><span class="v">午前 <b>9:00〜12:00</b>／午後 <b>14:00〜17:00</b></span></div>
+      <div><span class="k">場所</span><span class="v">都内近郊（お申し込み後にご案内します）</span></div>
+      <div><span class="k">定員</span><span class="v">各回 <b>10名</b></span></div>
+      <div><span class="k">持ち物</span><span class="v"><b>ノートパソコン</b>（お持ちでない場合はご相談ください）</span></div>
+      <div><span class="k">参加費</span><span class="v"><b>5,000円</b>／教材にコメントを書いた方は<b>無料</b></span></div>
     </div>
   </div>
 
-  <div class="card">
-    <h2>お申し込み<small>1分で終わります</small></h2>
+  <div class="block" id="formBlock">
+    <h2>お申し込み</h2>
 
-    <label class="q" for="day">ご希望の日<span class="req">必須</span></label>
-    <select id="day">
-      <option value="">選んでください</option>
-      <option>8月23日（日）※初回</option>
-      <option>9月13日（日）</option>
-      <option>9月27日（日）</option>
-      <option>10月11日（日）</option>
-      <option>10月25日（日）</option>
-      <option>11月8日（日）</option>
-      <option>日程を相談したい</option>
-    </select>
-
-    <label class="q">時間帯<span class="req">必須</span></label>
-    <label class="radio"><input type="radio" name="slot" value="午前 9:00〜12:00">午前 9:00〜12:00</label>
-    <label class="radio"><input type="radio" name="slot" value="午後 14:00〜17:00">午後 14:00〜17:00</label>
-    <label class="radio"><input type="radio" name="slot" value="どちらでも可">どちらでも大丈夫です</label>
-
-    <label class="q" for="name">お名前<span class="req">必須</span></label>
-    <input type="text" id="name" placeholder="例：山田 太郎" autocomplete="name">
-
-    <label class="q" for="company">会社名・屋号 <small>（個人の方は「個人」で結構です）</small></label>
-    <input type="text" id="company" placeholder="例：株式会社サンプル" autocomplete="organization">
-
-    <label class="q" for="tel">お電話番号<span class="req">必須</span></label>
-    <input type="tel" id="tel" placeholder="例：090-1234-5678" autocomplete="tel">
-
-    <label class="q" for="mail">メールアドレス<span class="req">必須</span></label>
-    <input type="email" id="mail" placeholder="例：sample@example.com" autocomplete="email">
-
-    <label class="q">参加費<span class="req">必須</span></label>
-    <label class="radio"><input type="radio" name="fee" value="無料枠（Brain記事にコメントを書く／書いた）">コメントを書いて <b>無料</b><small>AI活用教材（2,980円）の記事にレビューを書いた方は参加費無料です</small></label>
-    <label class="radio"><input type="radio" name="fee" value="通常参加 5,000円（事前振込）">通常参加 <b>5,000円</b><small>事前振込。お振込先は受付後に自動でご案内します</small></label>
-
-    <label class="q">使ったことのあるAI <small>（いくつでも）</small></label>
-    <div class="chips" id="aiChips">
-      <label class="chip"><input type="checkbox" value="ChatGPT">ChatGPT</label>
-      <label class="chip"><input type="checkbox" value="Gemini">Gemini</label>
-      <label class="chip"><input type="checkbox" value="Claude">Claude</label>
-      <label class="chip"><input type="checkbox" value="Copilot">Copilot</label>
-      <label class="chip"><input type="checkbox" value="その他">その他</label>
-      <label class="chip"><input type="checkbox" value="使ったことがない">使ったことがない</label>
+    <div class="field">
+      <label for="day">ご希望の日<span class="req">必須</span></label>
+      <select id="day">
+        <option value="">選んでください</option>
+        <option>8月23日（日）── 初回</option>
+        <option>9月13日（日）</option>
+        <option>9月27日（日）</option>
+        <option>10月11日（日）</option>
+        <option>10月25日（日）</option>
+        <option>11月8日（日）</option>
+        <option>日程を相談したい</option>
+      </select>
     </div>
 
-    <label class="q">AIの使用歴</label>
-    <select id="level">
-      <option value="">選んでください</option>
-      <option>まったくの初めて</option>
-      <option>登録はしたが、ほとんど使っていない</option>
-      <option>ときどき使う（調べもの・文章づくり）</option>
-      <option>毎日使っている</option>
-      <option>仕事の仕組みに組み込んでいる</option>
-    </select>
+    <div class="field">
+      <label>時間帯<span class="req">必須</span></label>
+      <label class="pick"><input type="radio" name="slot" value="午前 9:00〜12:00">午前　9:00〜12:00</label>
+      <label class="pick"><input type="radio" name="slot" value="午後 14:00〜17:00">午後　14:00〜17:00</label>
+      <label class="pick"><input type="radio" name="slot" value="どちらでも可">どちらでも大丈夫です</label>
+    </div>
 
-    <label class="q" for="job">いまいちばん時間をとられている仕事 <small>（任意）</small></label>
-    <textarea id="job" rows="2" placeholder="例：見積づくり、日報の集計、問い合わせ対応"></textarea>
+    <div class="field">
+      <label for="name">お名前<span class="req">必須</span></label>
+      <input type="text" id="name" placeholder="山田 太郎" autocomplete="name">
+    </div>
 
-    <label class="q" for="memo">当日つくりたいもの・ご質問 <small>（任意）</small></label>
-    <textarea id="memo" rows="2" placeholder="例：見積の下書きを書いてくれるAIがほしい"></textarea>
+    <div class="field">
+      <label for="company">会社名・屋号<span class="opt">任意</span></label>
+      <input type="text" id="company" placeholder="株式会社サンプル（個人の方は「個人」で結構です）" autocomplete="organization">
+    </div>
 
-    <button class="btn" id="send">この内容でLINEから申し込む<small>内容が自動で入力されます。送信すれば完了です</small></button>
-    <p class="err" id="err">必須の項目が入っていません。上からご確認ください</p>
-    <p class="hint">ボタンを押すとLINEが開きます。内容を確認して送信してください。<br>受付のご案内が自動で届きます。</p>
+    <div class="field">
+      <label for="tel">お電話番号<span class="req">必須</span></label>
+      <input type="tel" id="tel" placeholder="090-1234-5678" autocomplete="tel">
+    </div>
+
+    <div class="field">
+      <label for="mail">メールアドレス<span class="req">必須</span></label>
+      <input type="email" id="mail" placeholder="sample@example.com" autocomplete="email">
+    </div>
+
+    <div class="field">
+      <label>参加費<span class="req">必須</span></label>
+      <label class="pick"><input type="radio" name="fee" value="無料枠（AI活用教材にコメントを書く／書いた）">コメントを書いて参加（無料）<small>AI活用教材（2,980円）にレビューを書いた方は参加費が無料になります</small></label>
+      <label class="pick"><input type="radio" name="fee" value="通常参加 5,000円（事前振込）">通常参加（5,000円）<small>事前のお振込みです。お振込先は、お申し込み後に自動でご案内します</small></label>
+    </div>
+
+    <div class="field">
+      <label>使ったことのあるAI<span class="opt">任意</span></label>
+      <div class="chips" id="aiChips">
+        <label class="chip"><input type="checkbox" value="ChatGPT">ChatGPT</label>
+        <label class="chip"><input type="checkbox" value="Gemini">Gemini</label>
+        <label class="chip"><input type="checkbox" value="Claude">Claude</label>
+        <label class="chip"><input type="checkbox" value="Copilot">Copilot</label>
+        <label class="chip"><input type="checkbox" value="その他">その他</label>
+        <label class="chip"><input type="checkbox" value="使ったことがない">使ったことがない</label>
+      </div>
+      <p class="help">いくつでも選べます。ひとつも使ったことがなくて大丈夫です。</p>
+    </div>
+
+    <div class="field">
+      <label for="level">AIの使用歴<span class="opt">任意</span></label>
+      <select id="level">
+        <option value="">選んでください</option>
+        <option>まったくの初めて</option>
+        <option>登録はしたが、ほとんど使っていない</option>
+        <option>ときどき使う（調べもの・文章づくり）</option>
+        <option>毎日使っている</option>
+        <option>仕事の仕組みに組み込んでいる</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="job">いま、いちばん時間をとられている仕事<span class="opt">任意</span></label>
+      <textarea id="job" rows="2" placeholder="見積づくり、日報の集計、問い合わせ対応 など"></textarea>
+      <p class="help">当日つくるAIの材料になります。書いていただけると、その分だけ濃い時間になります。</p>
+    </div>
+
+    <div class="field">
+      <label for="memo">当日つくりたいもの・ご質問<span class="opt">任意</span></label>
+      <textarea id="memo" rows="2" placeholder="見積の下書きを書いてくれるAIがほしい など"></textarea>
+    </div>
+
+    <button class="submit" id="send">この内容でLINEから申し込む<small>送信後、受付のご案内が自動で届きます</small></button>
+    <p class="formerr" id="err">必須の項目が入っていません。上からご確認ください。</p>
+    <p class="aftersend">お申し込み後、参加費のご案内（お振込先、または無料枠の進め方）が自動で届きます。<br>会場の詳細は、開催前にこのLINEでお送りします。</p>
+  </div>
+
+  <div class="done" id="done">
+    <div class="mark">✓</div>
+    <h2>お申し込みを送信しました</h2>
+    <p>ありがとうございます。<br>受付のご案内がLINEに自動で届きます。</p>
   </div>
 
   <div class="foot">
-    <b>TripleEight</b>｜業務改善・仕組み化コンサルタント 河村杜永（もりお）<br>社長の時間を、利益に変える。
+    <b>TripleEight</b>｜業務改善・仕組み化コンサルタント　河村杜永（もりお）<br>
+    社長の時間を、利益に変える。
   </div>
 </div>
 
 <script>
-document.querySelectorAll('.radio input').forEach(r=>{
-  r.addEventListener('change',()=>{
-    document.querySelectorAll('input[name="'+r.name+'"]').forEach(x=>x.closest('.radio').classList.toggle('on',x.checked));
+document.querySelectorAll('.pick input').forEach(r => {
+  r.addEventListener('change', () => {
+    document.querySelectorAll('input[name="' + r.name + '"]').forEach(x => x.closest('.pick').classList.toggle('on', x.checked));
   });
 });
-document.querySelectorAll('.chip input').forEach(c=>{
-  c.addEventListener('change',()=>c.closest('.chip').classList.toggle('on',c.checked));
+document.querySelectorAll('.chip input').forEach(c => {
+  c.addEventListener('change', () => c.closest('.chip').classList.toggle('on', c.checked));
 });
-document.getElementById('send').addEventListener('click',()=>{
+
+document.getElementById('send').addEventListener('click', async () => {
   const v = id => document.getElementById(id).value.trim();
   const day = v('day');
-  const slot = (document.querySelector('input[name=slot]:checked')||{}).value;
-  const fee = (document.querySelector('input[name=fee]:checked')||{}).value;
+  const slot = (document.querySelector('input[name=slot]:checked') || {}).value;
+  const fee = (document.querySelector('input[name=fee]:checked') || {}).value;
   const name = v('name'), tel = v('tel'), mail = v('mail');
   const err = document.getElementById('err');
-  if(!day || !slot || !name || !tel || !mail || !fee){ err.style.display='block'; window.scrollTo({top:0,behavior:'smooth'}); return; }
-  err.style.display='none';
-  const ai = [...document.querySelectorAll('#aiChips input:checked')].map(x=>x.value).join('・');
+  if (!day || !slot || !name || !tel || !mail || !fee) {
+    err.style.display = 'block';
+    err.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    return;
+  }
+  err.style.display = 'none';
+
+  const ai = [...document.querySelectorAll('#aiChips input:checked')].map(x => x.value).join('・');
   const lines = [
     '【セットアップ会 参加希望】',
     '希望日：' + day,
@@ -218,7 +193,14 @@ document.getElementById('send').addEventListener('click',()=>{
     v('job') ? '時間をとられている仕事：' + v('job') : '',
     v('memo') ? 'つくりたいもの／質問：' + v('memo') : ''
   ].filter(Boolean);
-  location.href = 'https://line.me/R/oaMessage/%40210uvwaj/?' + encodeURIComponent(lines.join('\n'));
+
+  await window.sendToLine(lines.join('\n'), {
+    onSent: () => {
+      document.getElementById('formBlock').style.display = 'none';
+      document.getElementById('done').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
 });
 </script>
 </body>
