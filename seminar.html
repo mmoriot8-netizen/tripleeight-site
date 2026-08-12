@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" type="image/png" href="favicon.png">
 <title>AIセットアップ会 申込｜TripleEight</title>
-<meta name="description" content="あなたの手元に、AIの相棒を作って持ち帰る会。毎月第2・第4日曜開催。申込は1分で完了します。">
+<meta name="description" content="自分の会社用のAIを、その日のうちに一体つくって持ち帰る会。毎月第2・第4日曜開催。申込は1分で完了します。">
 <style>
 :root{
   --main:#001743;
@@ -22,18 +22,34 @@ body{
   -webkit-font-smoothing:antialiased;padding-bottom:60px;
 }
 .wrap{max-width:620px;margin:0 auto;padding:0 16px}
+
+/* ── ロゴヘッダー ── */
+.logobar{background:#fff;border-bottom:1px solid var(--line);padding:14px 0}
+.logobar img{display:block;height:44px;margin:0 auto}
+
 .head{background:var(--main);color:#fff;padding:30px 0 26px;text-align:center}
 .head .brand{font-size:12px;font-weight:800;letter-spacing:.18em;color:var(--accent);margin-bottom:10px}
-.head h1{font-size:22px;font-weight:800;line-height:1.5}
-.head p{font-size:13.5px;opacity:.85;margin-top:8px}
+.head h1{font-size:23px;font-weight:800;line-height:1.5}
+.head p{font-size:13.5px;opacity:.9;margin-top:8px}
+
+.greet{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin-top:16px;font-size:14.5px}
+.greet .sign{margin-top:14px;font-size:13px;color:var(--muted);text-align:right;line-height:1.6}
+
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin-top:16px}
 .card h2{font-size:15px;font-weight:800;color:var(--main);margin-bottom:12px}
+.card h2 small{font-weight:600;color:var(--muted);font-size:12.5px;margin-left:6px}
+.flow{list-style:none;counter-reset:f}
+.flow li{counter-increment:f;position:relative;padding:8px 0 8px 34px;font-size:14px;border-bottom:1px dashed var(--line)}
+.flow li:last-child{border-bottom:none}
+.flow li::before{content:counter(f);position:absolute;left:0;top:9px;width:23px;height:23px;border-radius:50%;background:var(--main);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
 .specs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.spec{background:#fff;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:12.5px;font-weight:700}
+.spec{background:#f6f8fc;border:1px solid var(--line);border-radius:99px;padding:7px 14px;font-size:12.5px;font-weight:700}
 .spec b{color:var(--main)}
-label.q{display:block;font-size:14px;font-weight:800;margin:18px 0 8px}
+
+label.q{display:block;font-size:14px;font-weight:800;margin:20px 0 8px}
+label.q .req{color:#c7000b;font-size:11.5px;margin-left:6px;font-weight:800}
 label.q small{font-weight:600;color:var(--muted)}
-select,input[type=text],textarea{
+select,input[type=text],input[type=tel],input[type=email],textarea{
   width:100%;font-size:16px;padding:13px 14px;border:1.5px solid var(--line);
   border-radius:10px;background:#fff;color:var(--text);appearance:none;font-family:inherit;
 }
@@ -42,13 +58,16 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--main)}
 .radio input{margin-right:9px;accent-color:var(--main)}
 .radio.on{border-color:var(--main);background:#f6f8fc}
 .radio small{display:block;font-weight:600;color:var(--muted);font-size:12.5px;margin-top:2px;padding-left:24px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);border-radius:99px;padding:9px 15px;font-size:13.5px;font-weight:700;background:#fff;cursor:pointer}
+.chip input{display:none}
+.chip.on{border-color:var(--main);background:#f6f8fc;color:var(--main)}
 .btn{
   display:block;width:100%;text-align:center;background:#06c755;color:#fff;
   font-size:16.5px;font-weight:800;padding:16px;border:none;border-radius:12px;
-  margin-top:22px;cursor:pointer;font-family:inherit;
+  margin-top:24px;cursor:pointer;font-family:inherit;
 }
-.btn:disabled{opacity:.45}
-.btn small{display:block;font-size:12px;font-weight:700;opacity:.9;margin-top:2px}
+.btn small{display:block;font-size:12px;font-weight:700;opacity:.92;margin-top:2px}
 .hint{font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center}
 .err{color:#c7000b;font-size:13px;font-weight:700;margin-top:10px;display:none;text-align:center}
 .foot{margin-top:30px;text-align:center;font-size:12.5px;color:var(--muted)}
@@ -57,60 +76,112 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--main)}
 </head>
 <body>
 
+<div class="logobar"><img src="thumbs/logo_lockup.jpg" alt="TripleEight"></div>
+
 <div class="head">
   <div class="wrap">
-    <div class="brand">TRIPLEEIGHT</div>
-    <h1>AIセットアップ会 申込</h1>
-    <p>あなたの手元に、AIの相棒を作って持ち帰る会</p>
+    <div class="brand">SEMINAR</div>
+    <h1>AIセットアップ会</h1>
+    <p>自分の会社用のAIを、一体つくって持ち帰る日</p>
   </div>
 </div>
 
 <div class="wrap">
 
+  <div class="greet">
+    <p>はじめまして。業務改善・仕組み化コンサルタントの河村杜永（もりお）と申します。</p>
+    <p style="margin-top:12px">「AIがいいらしい」と聞いて入れてみたけれど、結局なにも変わらなかった——そんな声を、たくさん聞いてきました。原因はたいてい、道具ではなく<b>順番</b>です。</p>
+    <p style="margin-top:12px">この会では、座学は最小限にして、<b>あなたの会社の仕事をそのまま持ち込んでいただきます</b>。その場で一緒に手を動かし、明日から使えるAIを一体つくって、お持ち帰りいただく。それだけの会です。</p>
+    <p style="margin-top:12px">パソコンが苦手でも大丈夫です。となりで一緒に進めます。お会いできるのを楽しみにしています。</p>
+    <div class="sign">河村杜永（もりお）／TripleEight<br>言葉になっていない困りごとを、形にする。</div>
+  </div>
+
   <div class="card">
-    <h2>開催概要</h2>
-    <p style="font-size:14px">毎月<b>第2・第4日曜</b>に開催しています（初回は8月23日）。座学1時間＋一緒にセットアップ2時間。ノートPCをお持ちください。</p>
+    <h2>当日の流れ<small>3時間</small></h2>
+    <ol class="flow">
+      <li>いまの仕事のどこが詰まっているかを、書き出す（30分）</li>
+      <li>外す順番を決める。ここがいちばん大事です（30分）</li>
+      <li>あなたの会社用のAIを、その場でつくる（90分）</li>
+      <li>明日からの使い方を決めて、持ち帰る（30分）</li>
+    </ol>
     <div class="specs">
       <span class="spec">午前 <b>9:00〜12:00</b></span>
       <span class="spec">午後 <b>14:00〜17:00</b></span>
       <span class="spec">場所 <b>都内近郊</b></span>
       <span class="spec">定員 <b>各回10名</b></span>
+      <span class="spec">持ち物 <b>ノートPC</b></span>
     </div>
   </div>
 
   <div class="card">
-    <h2>申込フォーム（1分）</h2>
+    <h2>お申し込み<small>1分で終わります</small></h2>
 
-    <label class="q" for="day">希望日</label>
+    <label class="q" for="day">ご希望の日<span class="req">必須</span></label>
     <select id="day">
       <option value="">選んでください</option>
       <option>8月23日（日）※初回</option>
       <option>9月13日（日）</option>
       <option>9月27日（日）</option>
-      <option>未定（日程を相談したい）</option>
+      <option>10月11日（日）</option>
+      <option>10月25日（日）</option>
+      <option>11月8日（日）</option>
+      <option>日程を相談したい</option>
     </select>
 
-    <label class="q">時間帯</label>
+    <label class="q">時間帯<span class="req">必須</span></label>
     <label class="radio"><input type="radio" name="slot" value="午前 9:00〜12:00">午前 9:00〜12:00</label>
     <label class="radio"><input type="radio" name="slot" value="午後 14:00〜17:00">午後 14:00〜17:00</label>
+    <label class="radio"><input type="radio" name="slot" value="どちらでも可">どちらでも大丈夫です</label>
 
-    <label class="q" for="name">お名前</label>
+    <label class="q" for="name">お名前<span class="req">必須</span></label>
     <input type="text" id="name" placeholder="例：山田 太郎" autocomplete="name">
 
-    <label class="q">参加費</label>
-    <label class="radio"><input type="radio" name="fee" value="コメント無料（Brain記事にコメントを書く／書いた）">Brain記事にコメントを書く → <b>無料</b><small>教材（2,980円）の記事にレビューを書いた方は参加費無料です</small></label>
-    <label class="radio"><input type="radio" name="fee" value="通常参加 5,000円（事前振込）">通常参加 5,000円<small>事前振込。お振込先は受付後にご案内します</small></label>
+    <label class="q" for="company">会社名・屋号 <small>（個人の方は「個人」で結構です）</small></label>
+    <input type="text" id="company" placeholder="例：株式会社サンプル" autocomplete="organization">
 
-    <label class="q" for="memo">ひとこと <small>（任意）</small></label>
-    <textarea id="memo" rows="2" placeholder="例：Claudeを入れたが何もできていない、など"></textarea>
+    <label class="q" for="tel">お電話番号<span class="req">必須</span></label>
+    <input type="tel" id="tel" placeholder="例：090-1234-5678" autocomplete="tel">
 
-    <button class="btn" id="send">LINEで申し込む<small>内容が自動で入力されます。送信して完了です</small></button>
-    <p class="err" id="err">希望日・時間帯・お名前・参加費を選んでください</p>
-    <p class="hint">ボタンを押すとLINEが開きます。内容を確認して送信してください。</p>
+    <label class="q" for="mail">メールアドレス<span class="req">必須</span></label>
+    <input type="email" id="mail" placeholder="例：sample@example.com" autocomplete="email">
+
+    <label class="q">参加費<span class="req">必須</span></label>
+    <label class="radio"><input type="radio" name="fee" value="無料枠（Brain記事にコメントを書く／書いた）">コメントを書いて <b>無料</b><small>AI活用教材（2,980円）の記事にレビューを書いた方は参加費無料です</small></label>
+    <label class="radio"><input type="radio" name="fee" value="通常参加 5,000円（事前振込）">通常参加 <b>5,000円</b><small>事前振込。お振込先は受付後に自動でご案内します</small></label>
+
+    <label class="q">使ったことのあるAI <small>（いくつでも）</small></label>
+    <div class="chips" id="aiChips">
+      <label class="chip"><input type="checkbox" value="ChatGPT">ChatGPT</label>
+      <label class="chip"><input type="checkbox" value="Gemini">Gemini</label>
+      <label class="chip"><input type="checkbox" value="Claude">Claude</label>
+      <label class="chip"><input type="checkbox" value="Copilot">Copilot</label>
+      <label class="chip"><input type="checkbox" value="その他">その他</label>
+      <label class="chip"><input type="checkbox" value="使ったことがない">使ったことがない</label>
+    </div>
+
+    <label class="q">AIの使用歴</label>
+    <select id="level">
+      <option value="">選んでください</option>
+      <option>まったくの初めて</option>
+      <option>登録はしたが、ほとんど使っていない</option>
+      <option>ときどき使う（調べもの・文章づくり）</option>
+      <option>毎日使っている</option>
+      <option>仕事の仕組みに組み込んでいる</option>
+    </select>
+
+    <label class="q" for="job">いまいちばん時間をとられている仕事 <small>（任意）</small></label>
+    <textarea id="job" rows="2" placeholder="例：見積づくり、日報の集計、問い合わせ対応"></textarea>
+
+    <label class="q" for="memo">当日つくりたいもの・ご質問 <small>（任意）</small></label>
+    <textarea id="memo" rows="2" placeholder="例：見積の下書きを書いてくれるAIがほしい"></textarea>
+
+    <button class="btn" id="send">この内容でLINEから申し込む<small>内容が自動で入力されます。送信すれば完了です</small></button>
+    <p class="err" id="err">必須の項目が入っていません。上からご確認ください</p>
+    <p class="hint">ボタンを押すとLINEが開きます。内容を確認して送信してください。<br>受付のご案内が自動で届きます。</p>
   </div>
 
   <div class="foot">
-    <b>TripleEight</b>｜河村杜永（もりお）<br>社長の時間を、利益に変える。
+    <b>TripleEight</b>｜業務改善・仕組み化コンサルタント 河村杜永（もりお）<br>社長の時間を、利益に変える。
   </div>
 </div>
 
@@ -120,22 +191,34 @@ document.querySelectorAll('.radio input').forEach(r=>{
     document.querySelectorAll('input[name="'+r.name+'"]').forEach(x=>x.closest('.radio').classList.toggle('on',x.checked));
   });
 });
+document.querySelectorAll('.chip input').forEach(c=>{
+  c.addEventListener('change',()=>c.closest('.chip').classList.toggle('on',c.checked));
+});
 document.getElementById('send').addEventListener('click',()=>{
-  const day = document.getElementById('day').value;
+  const v = id => document.getElementById(id).value.trim();
+  const day = v('day');
   const slot = (document.querySelector('input[name=slot]:checked')||{}).value;
-  const name = document.getElementById('name').value.trim();
   const fee = (document.querySelector('input[name=fee]:checked')||{}).value;
-  const memo = document.getElementById('memo').value.trim();
+  const name = v('name'), tel = v('tel'), mail = v('mail');
   const err = document.getElementById('err');
-  if(!day || !slot || !name || !fee){ err.style.display='block'; return; }
+  if(!day || !slot || !name || !tel || !mail || !fee){ err.style.display='block'; window.scrollTo({top:0,behavior:'smooth'}); return; }
   err.style.display='none';
-  const text = '【セットアップ会 参加希望】\n'
-    + '希望日：' + day + '\n'
-    + '時間帯：' + slot + '\n'
-    + 'お名前：' + name + '\n'
-    + '参加費：' + fee
-    + (memo ? '\nひとこと：' + memo : '');
-  location.href = 'https://line.me/R/oaMessage/%40210uvwaj/?' + encodeURIComponent(text);
+  const ai = [...document.querySelectorAll('#aiChips input:checked')].map(x=>x.value).join('・');
+  const lines = [
+    '【セットアップ会 参加希望】',
+    '希望日：' + day,
+    '時間帯：' + slot,
+    'お名前：' + name,
+    v('company') ? '会社名：' + v('company') : '',
+    '電話：' + tel,
+    'メール：' + mail,
+    '参加費：' + fee,
+    ai ? '使用経験AI：' + ai : '',
+    v('level') ? 'AI使用歴：' + v('level') : '',
+    v('job') ? '時間をとられている仕事：' + v('job') : '',
+    v('memo') ? 'つくりたいもの／質問：' + v('memo') : ''
+  ].filter(Boolean);
+  location.href = 'https://line.me/R/oaMessage/%40210uvwaj/?' + encodeURIComponent(lines.join('\n'));
 });
 </script>
 </body>

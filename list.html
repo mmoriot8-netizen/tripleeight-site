@@ -26,6 +26,32 @@ body{
 .wrap{max-width:620px;margin:0 auto;padding:0 16px}
 .hidden{display:none!important}
 
+/* ── ロゴヘッダー ── */
+.logobar{background:#fff;border-bottom:1px solid var(--line);padding:14px 0}
+.logobar img{display:block;height:44px;margin:0 auto}
+
+/* ── 冒頭の入力 ── */
+.entry{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;text-align:left;margin-bottom:14px}
+.entry h2{font-size:14px;font-weight:800;color:var(--main);margin-bottom:4px}
+.entry .lead2{font-size:12.5px;color:var(--muted);margin-bottom:12px;line-height:1.6}
+.entry label{display:block;font-size:13px;font-weight:800;margin:12px 0 6px}
+.entry label .req{color:#c7000b;font-size:11px;margin-left:5px}
+.entry input{width:100%;font-size:16px;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;background:#fff;color:var(--text)}
+.entry input:focus{outline:none;border-color:var(--main)}
+.entry .eerr{display:none;color:#c7000b;font-size:12.5px;font-weight:700;margin-top:10px}
+
+/* ── 印刷（PDF保存）用 ── */
+@media print{
+  .prog,.bar,.entry,.linebtn{display:none!important}
+  body{background:#fff;padding:0}
+  .res,.step{page-break-inside:avoid}
+  a[href]:after{content:""}
+}
+.printhead{display:none}
+@media print{.printhead{display:block;text-align:center;margin-bottom:18px;border-bottom:2px solid var(--main);padding-bottom:12px}
+.printhead .pt{font-size:18px;font-weight:800;color:var(--main)}
+.printhead .pm{font-size:12px;color:var(--muted);margin-top:4px}}
+
 /* ── 進捗バー ── */
 .prog{position:sticky;top:0;z-index:50;background:var(--bg);padding:14px 0 10px;border-bottom:1px solid var(--line)}
 .prog .meta{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:7px}
@@ -171,6 +197,9 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
 </head>
 <body>
 
+<!-- ════════ ロゴ ════════ -->
+<div class="logobar"><img src="thumbs/logo_lockup.jpg" alt="TripleEight"></div>
+
 <!-- ════════ 進捗 ════════ -->
 <div class="prog hidden" id="prog"><div class="wrap">
   <div class="meta"><span id="pnum"></span><em id="ppct"></em></div>
@@ -201,7 +230,19 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
         <li>会社の<b>詰まりタイプ</b>（6タイプ・深掘り10分）</li>
       </ul>
     </div>
-    <p class="note">※ 結果はこの画面に出ます。メールアドレスの入力はありません。<br>※ 深掘りは任意です。5分の結果だけでも持ち帰れます。</p>
+    <div class="entry">
+      <h2>はじめる前に</h2>
+      <p class="lead2">結果をPDFで保存できるようにするため、3つだけ教えてください。<br>ご入力いただいた内容は、診断結果のご案内以外には使いません。</p>
+      <label for="uName">お名前<span class="req">必須</span></label>
+      <input type="text" id="uName" placeholder="例：山田 太郎" autocomplete="name">
+      <label for="uCompany">会社名・屋号<span class="req">必須</span></label>
+      <input type="text" id="uCompany" placeholder="例：株式会社サンプル（個人の方は「個人」で結構です）" autocomplete="organization">
+      <label for="uMail">メールアドレス<span class="req">必須</span></label>
+      <input type="email" id="uMail" placeholder="例：sample@example.com" autocomplete="email">
+      <p class="eerr" id="eerr">3つとも入力してください</p>
+    </div>
+
+    <p class="note">※ 結果はこの画面に出ます。そのままPDFで保存できます。<br>※ 深掘りは任意です。5分の結果だけでも持ち帰れます。</p>
   </section>
 
   <!-- ════════ 1. 業務を選ぶ ════════ -->
@@ -304,7 +345,7 @@ details.calc code{background:#f2f4f7;padding:2px 7px;border-radius:5px;font-size
       <h3>ここから先は、一人だと止まりやすい</h3>
       <p>診断で、詰まっている場所は見えました。次の工程は<span class="strong">「判断の基準を言葉にする」</span>——ここが、一人でやると一番止まりやすいところです。<br><br>
       この診断書を持って、オンラインで30分、お話しできます。<span class="strong">売り込みはしません。</span>順番の相談だけでも構いません。</p>
-      <a class="linebtn" id="lineBtn" href="https://line.me/R/ti/p/%40210uvwaj" target="_blank" rel="noopener">公式LINEで、この結果を相談する</a>
+      <a class="linebtn" id="lineBtn" href="#" onclick="sendResultToTalk();return false;">公式LINEで、この結果を相談する</a>
       <p style="font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center">毎月第2・第4日曜の「AIセットアップ会」のご案内も、公式LINEから届きます。</p>
     </div>
   </section>
@@ -426,6 +467,33 @@ let deepIdx = 0;      // 深掘りの現在問
 const deepAns = [];   // 各問のスコア
 let deepDone = false;
 let phase = "intro";  // intro / pick / detail / mid / deep / res
+const USER = { name:"", company:"", mail:"" };
+try{ const s = localStorage.getItem("te_user"); if(s){ const o = JSON.parse(s); USER.name=o.name||""; USER.company=o.company||""; USER.mail=o.mail||""; } }catch(e){}
+
+/* ── 結果をLINEトークへ送る（本人が送信ボタンを押す）── */
+function sendResultToTalk(){
+  const text = (typeof resultText === "string" && resultText) ? resultText : "詰まり診断の結果について相談したいです。";
+  location.href = "https://line.me/R/oaMessage/%40210uvwaj/?" + encodeURIComponent(text);
+}
+
+/* ── PDFで保存（ブラウザの印刷→PDF）── */
+function savePdf(){
+  const d = new Date();
+  const stamp = d.getFullYear() + "年" + (d.getMonth()+1) + "月" + d.getDate() + "日";
+  let ph = document.getElementById("printhead");
+  if(!ph){
+    ph = document.createElement("div");
+    ph.id = "printhead"; ph.className = "printhead";
+    document.body.insertBefore(ph, document.body.firstChild);
+  }
+  ph.innerHTML = '<div class="pt">詰まり診断 結果レポート</div>' +
+    '<div class="pm">' + (USER.company ? USER.company + "　" : "") + (USER.name ? USER.name + " 様" : "") + '</div>' +
+    '<div class="pm">発行日：' + stamp + '　／　TripleEight（河村杜永）</div>';
+  const t = document.title;
+  document.title = "詰まり診断_" + (USER.company || "結果") + "_" + d.getFullYear() + ("0"+(d.getMonth()+1)).slice(-2) + ("0"+d.getDate()).slice(-2);
+  window.print();
+  setTimeout(()=>{ document.title = t; }, 800);
+}
 
 const $ = s => document.querySelector(s);
 const bar = $("#bar"), barIn = $("#barIn");
@@ -480,7 +548,16 @@ function renderBar(){
   bar.classList.remove("hidden");
   if(phase==="intro"){
     barIn.innerHTML = '<button class="btn" id="go">はじめる（まず5分）</button>';
-    $("#go").onclick = ()=>{ phase="pick"; show(); };
+    $("#go").onclick = ()=>{
+      const n = ($("#uName")||{}).value, c = ($("#uCompany")||{}).value, m = ($("#uMail")||{}).value;
+      if(!n || !n.trim() || !c || !c.trim() || !m || !m.trim() || m.indexOf("@")<0){
+        const e = $("#eerr"); if(e){ e.style.display="block"; e.scrollIntoView({block:"center",behavior:"smooth"}); }
+        return;
+      }
+      USER.name = n.trim(); USER.company = c.trim(); USER.mail = m.trim();
+      try{ localStorage.setItem("te_user", JSON.stringify(USER)); }catch(e){}
+      phase="pick"; show();
+    };
   }
   else if(phase==="pick"){
     barIn.innerHTML = '<button class="btn" id="nx" '+(picked.length?'':'disabled')+'>次へ（'+picked.length+'つ）</button>';
@@ -504,8 +581,10 @@ function renderBar(){
   }
   else if(phase==="mid"){
     barIn.innerHTML =
+      '<button class="btn ghost" id="pdfm">PDFで保存</button>' +
       '<button class="btn ghost wide" id="skip">結果だけ見る</button>' +
       '<button class="btn" id="deep">深掘りする（10分）</button>';
+    $("#pdfm").onclick = savePdf;
     $("#skip").onclick = ()=>{ phase="res"; calc(); show(); };
     $("#deep").onclick = ()=>{ phase="deep"; deepIdx = deepAns.length; if(deepIdx>=DEEP.length) deepIdx=DEEP.length-1; show(); };
   }
@@ -520,17 +599,17 @@ function renderBar(){
     $("#quit").onclick = ()=>{ deepDone = deepAns.length===DEEP.length; phase="res"; calc(); show(); };
   }
   else if(phase==="res"){
-    let html = '<button class="btn ghost" id="cp">結果をコピー</button>';
+    let html = '<button class="btn ghost" id="pdfr">PDFで保存</button>';
     if(!deepDone) html += '<button class="btn" id="godeep">深掘りする（10分）</button>';
     else if(LIFF_ID && window.liff && liff.isInClient && liff.isInClient())
       html += '<button class="btn acc" id="send">この結果をLINEに送る</button>';
     else
       html += '<button class="btn line" id="goline">LINEで相談する</button>';
     barIn.innerHTML = html;
-    $("#cp").onclick = copyResult;
+    if($("#pdfr")) $("#pdfr").onclick = savePdf;
     if($("#godeep")) $("#godeep").onclick = ()=>{ phase="deep"; deepIdx = deepAns.length; if(deepIdx>=DEEP.length) deepIdx=0; show(); };
     if($("#send")) $("#send").onclick = sendToLine;
-    if($("#goline")) $("#goline").onclick = ()=>{ window.open("https://line.me/R/ti/p/%40210uvwaj","_blank"); };
+    if($("#goline")) $("#goline").onclick = sendResultToTalk;
   }
 }
 
@@ -644,7 +723,12 @@ function calc(){
   $("#rYear").innerHTML = yearLine(total);
 
   /* タイプ判定 */
-  const lines = ["【詰まりリスト 診断書】", "手放せる時間：月" + total + "時間（年" + total*12 + "時間）"];
+  const lines = ["【詰まり診断の結果】"];
+  if(USER.company) lines.push("会社名：" + USER.company);
+  if(USER.name) lines.push("お名前：" + USER.name);
+  if(USER.mail) lines.push("メール：" + USER.mail);
+  lines.push("");
+  lines.push("手放せる時間：月" + total + "時間（年" + total*12 + "時間）");
   if(deepDone){
     const secScore = {A:0,B:0,C:0,D:0,E:0,F:0};
     DEEP.forEach((d,k)=>{ secScore[d.s] += (deepAns[k]||0); });
