@@ -47,7 +47,7 @@
       <div><span class="k">場所</span><span class="v">都内近郊（お申し込み後にご案内します）</span></div>
       <div><span class="k">定員</span><span class="v">各回 <b>10名</b></span></div>
       <div><span class="k">持ち物</span><span class="v"><b>ノートパソコン</b>（お持ちでない場合はご相談ください）</span></div>
-      <div><span class="k">参加費</span><span class="v"><b>5,000円</b>／教材にコメントを書いた方は<b>無料</b></span></div>
+      <div><span class="k">参加費</span><span class="v"><b>5,000円</b>／Brainの記事にコメントを書いた方は<b>無料</b></span></div>
     </div>
   </div>
 
@@ -58,21 +58,14 @@
       <label for="day">ご希望の日<span class="req">必須</span></label>
       <select id="day">
         <option value="">選んでください</option>
-        <option>8月23日（日）── 初回</option>
-        <option>9月13日（日）</option>
-        <option>9月27日（日）</option>
-        <option>10月11日（日）</option>
-        <option>10月25日（日）</option>
-        <option>11月8日（日）</option>
-        <option>日程を相談したい</option>
       </select>
+      <p class="help">定員は各回10名です。残席は申込状況に応じて更新しています。</p>
     </div>
 
     <div class="field">
       <label>時間帯<span class="req">必須</span></label>
       <label class="pick"><input type="radio" name="slot" value="午前 9:00〜12:00">午前　9:00〜12:00</label>
       <label class="pick"><input type="radio" name="slot" value="午後 14:00〜17:00">午後　14:00〜17:00</label>
-      <label class="pick"><input type="radio" name="slot" value="どちらでも可">どちらでも大丈夫です</label>
     </div>
 
     <div class="field">
@@ -97,7 +90,7 @@
 
     <div class="field">
       <label>参加費<span class="req">必須</span></label>
-      <label class="pick"><input type="radio" name="fee" value="無料枠（AI活用教材にコメントを書く／書いた）">コメントを書いて参加（無料）<small>AI活用教材（2,980円）にレビューを書いた方は参加費が無料になります</small></label>
+      <label class="pick"><input type="radio" name="fee" value="無料枠（Brainの記事にコメントを書く／書いた）">コメントを書いて参加（無料）<small>Brainの記事（2,980円）にコメントを書いた方は参加費が無料になります</small></label>
       <label class="pick"><input type="radio" name="fee" value="通常参加 5,000円（事前振込）">通常参加（5,000円）<small>事前のお振込みです。お振込先は、お申し込み後に自動でご案内します</small></label>
     </div>
 
@@ -155,6 +148,39 @@
 </div>
 
 <script>
+/* ============================================================
+   開催日と残席
+   ------------------------------------------------------------
+   ★申込が入ったら、下の left の数字を減らしてください★
+   定員は各回10名です。0 にすると「満席」と表示され、選べなくなります。
+   ============================================================ */
+const DAYS = [
+  { date: '8月23日（日）',  left: 10 },
+  { date: '9月13日（日）',  left: 10 },
+  { date: '9月27日（日）',  left: 10 },
+  { date: '10月11日（日）', left: 10 },
+  { date: '10月25日（日）', left: 10 },
+  { date: '11月8日（日）',  left: 10 }
+];
+
+(function renderDays() {
+  const sel = document.getElementById('day');
+  DAYS.forEach(d => {
+    const o = document.createElement('option');
+    if (d.left <= 0) {
+      o.textContent = d.date + '　満席';
+      o.disabled = true;
+    } else {
+      o.textContent = d.date + '　残り' + d.left + '席';
+      o.value = d.date + '（残り' + d.left + '席）';
+    }
+    sel.appendChild(o);
+  });
+  const other = document.createElement('option');
+  other.textContent = '日程を相談したい';
+  sel.appendChild(other);
+})();
+
 document.querySelectorAll('.pick input').forEach(r => {
   r.addEventListener('change', () => {
     document.querySelectorAll('input[name="' + r.name + '"]').forEach(x => x.closest('.pick').classList.toggle('on', x.checked));
@@ -195,6 +221,7 @@ document.getElementById('send').addEventListener('click', async () => {
   ].filter(Boolean);
 
   await window.sendToLine(lines.join('\n'), {
+    keyword: 'AIセットアップ会に申し込みます',
     onSent: () => {
       document.getElementById('formBlock').style.display = 'none';
       document.getElementById('done').style.display = 'block';

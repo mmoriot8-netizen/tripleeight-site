@@ -1,36 +1,52 @@
 /* ============================================================
    TripleEight ── LINE送信の共通処理
    ------------------------------------------------------------
-   ★ここだけ書き換えれば、全ページが「完全自動送信」になります★
+   LIFF（LINE Front-end Framework）で、入力内容をトークへ自動送信します。
 
-   LINE Developers で LIFFアプリを作り、発行された LIFF ID を
-   下の TE_LIFF_ID に入れてください（権限は chat_message.write が必須）。
+   送るのは2通です。
+     1通目 = 合図の短い文（例「AIセットアップ会に申し込みます」）
+              → 公式LINEの「キーワード応答」がこれに反応し、
+                内容ごとに違う自動返信を出します。
+     2通目 = 入力内容そのもの（記録用）
 
-   ・空のまま        → LINEが開いて内容が入力された状態になる（送信は本人がタップ）
-   ・IDを入れた後    → LINEアプリ内で開いた場合、タップ不要で自動送信される
+   ※LINEアプリの外（PCブラウザなど）で開かれた場合は、
+     LINEを開いて内容を入力した状態にするだけになります（本人がタップ）。
    ============================================================ */
-window.TE_LIFF_ID = "";                 // 例: "2006383298-xxxxxxxx"
-window.TE_LINE_OA = "%40210uvwaj";      // 公式LINEのID（変更不要）
+window.TE_LIFF_ID = "2011089376-l1Yx6Y3j";
+window.TE_LINE_OA = "%40210uvwaj";
 
+/* LIFFの初期化は1回だけ。各ページはこのPromiseを待つ */
+window.TE_LIFF_READY = (function () {
+  if (!window.TE_LIFF_ID || !window.liff) return Promise.resolve(false);
+  return liff.init({ liffId: window.TE_LIFF_ID })
+    .then(function () { return true; })
+    .catch(function () { return false; });
+})();
+
+/**
+ * @param {string} text    トークへ送る本文（入力内容）
+ * @param {object} opts    { keyword: 合図の短文, onSent: 送信後に呼ばれる関数 }
+ */
 window.sendToLine = async function (text, opts) {
   opts = opts || {};
-  // ① LIFFが設定済み & LINEアプリ内 → 自動送信
-  if (window.TE_LIFF_ID && window.liff && liff.isInClient && liff.isInClient()) {
+  var keyword = opts.keyword || "";
+
+  var ready = false;
+  try { ready = await window.TE_LIFF_READY; } catch (e) { ready = false; }
+
+  if (ready && liff.isInClient()) {
     try {
-      await liff.sendMessages([{ type: "text", text: text }]);
+      var msgs = [];
+      if (keyword) msgs.push({ type: "text", text: keyword });
+      msgs.push({ type: "text", text: text });
+      await liff.sendMessages(msgs);
       if (opts.onSent) opts.onSent();
-      setTimeout(function () { liff.closeWindow(); }, 900);
+      setTimeout(function () { try { liff.closeWindow(); } catch (e) {} }, 1400);
       return true;
-    } catch (e) { /* 失敗したら②へ落ちる */ }
+    } catch (e) { /* 失敗したら下の手動送信へ落ちる */ }
   }
-  // ② それ以外 → LINEを開いて内容を入力した状態にする
-  location.href = "https://line.me/R/oaMessage/" + window.TE_LINE_OA + "/?" + encodeURIComponent(text);
+
+  var body = (keyword ? keyword + "\n" : "") + text;
+  location.href = "https://line.me/R/oaMessage/" + window.TE_LINE_OA + "/?" + encodeURIComponent(body);
   return false;
 };
-
-/* LIFF SDKが読み込まれていれば初期化しておく */
-(function () {
-  if (window.TE_LIFF_ID && window.liff) {
-    try { liff.init({ liffId: window.TE_LIFF_ID }); } catch (e) {}
-  }
-})();

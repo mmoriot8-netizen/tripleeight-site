@@ -610,7 +610,7 @@ function renderBar(){
     barIn.innerHTML = html;
     if($("#pdfr")) $("#pdfr").onclick = savePdf;
     if($("#godeep")) $("#godeep").onclick = ()=>{ phase="deep"; deepIdx = deepAns.length; if(deepIdx>=DEEP.length) deepIdx=0; show(); };
-    if($("#send")) $("#send").onclick = sendToLine;
+    if($("#send")) $("#send").onclick = sendResultViaLiff;
     if($("#goline")) $("#goline").onclick = sendResultToTalk;
   }
 }
@@ -809,13 +809,16 @@ function calc(){
 }
 
 /* ── LINEに送る ── */
-async function sendToLine(){
+async function sendResultViaLiff(){
   const b = $("#send");
   b.disabled = true; b.textContent = "送信しています…";
   try{
-    await liff.sendMessages([{type:"text", text:resultText}]);
+    await liff.sendMessages([
+      {type:"text", text:"詰まり診断の結果を送ります"},
+      {type:"text", text:resultText}
+    ]);
     b.textContent = "送信しました";
-    setTimeout(()=>liff.closeWindow(), 1000);
+    setTimeout(()=>liff.closeWindow(), 1400);
   }catch(e){
     alert("送信できませんでした。お手数ですが、トーク画面に直接ご記入ください。");
     b.disabled = false; b.textContent = "この結果をLINEに送る";
@@ -840,7 +843,7 @@ function copyResult(){
 
 /* ── 起動 ── */
 (async()=>{
-  if(LIFF_ID){ try{ await liff.init({liffId:LIFF_ID}); }catch(e){} }
+  try{ await window.TE_LIFF_READY; }catch(e){}
   show();
 })();
 </script>
