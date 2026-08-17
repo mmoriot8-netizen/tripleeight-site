@@ -1,0 +1,65 @@
+/* ============================================================
+   TripleEight ── 会社HPページ共通（form.cssの上に読み込む）
+   ============================================================ */
+
+/* ── ナビ ── */
+.nav{background:#fff;border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;gap:2px;overflow-x:auto;padding:0 14px}
+.nav a{
+  flex:0 0 auto;display:block;padding:12px 10px;font-size:12.5px;font-weight:700;
+  color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;white-space:nowrap;
+}
+.nav a.on{color:var(--navy);border-bottom-color:var(--pink)}
+
+/* ── サービスカード ── */
+.svc{display:grid;gap:10px;margin-top:8px}
+.svc a{
+  display:block;background:#fff;border:1px solid var(--line);border-radius:6px;
+  padding:16px 16px 14px;text-decoration:none;color:var(--ink);
+}
+.svc b{display:block;font-size:14.5px;font-weight:800;color:var(--navy);margin-bottom:3px}
+.svc span{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* ── サービス詳細 ── */
+.svc-sec{padding:30px 0;border-bottom:1px solid var(--line)}
+.svc-sec:last-of-type{border-bottom:none}
+.svc-sec h2{font-size:17px;font-weight:800;color:var(--navy);line-height:1.5;margin-bottom:4px}
+.svc-sec .who{font-size:12.5px;font-weight:700;color:var(--pink);margin-bottom:10px}
+.svc-sec p{font-size:14.5px}
+.svc-sec ul{list-style:none;margin-top:10px}
+.svc-sec ul li{
+  position:relative;padding:7px 0 7px 18px;font-size:14px;line-height:1.7;
+  border-top:1px solid var(--line);
+}
+.svc-sec ul li:first-child{border-top:none}
+.svc-sec ul li::before{content:"・";position:absolute;left:0;color:var(--pink);font-weight:800}
+
+/* ── 実績 ── */
+.work{background:#fff;border:1px solid var(--line);border-radius:6px;padding:18px 18px 16px;margin-top:12px}
+.work .cat{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--pink);margin-bottom:6px}
+.work h3{font-size:15.5px;font-weight:800;color:var(--navy);line-height:1.55;margin-bottom:8px}
+.work p{font-size:13.5px;color:var(--ink);line-height:1.8}
+.work p b{color:var(--navy)}
+
+/* ── お知らせ ── */
+.newslist{list-style:none;margin-top:4px}
+.newslist li{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.7}
+.newslist time{flex:0 0 92px;font-size:12.5px;color:var(--muted);font-weight:700;padding-top:2px}
+
+/* ── CTAボタン ── */
+.cta{
+  display:block;background:var(--navy);color:#fff;text-decoration:none;text-align:center;
+  font-size:15.5px;font-weight:800;padding:16px;border-radius:6px;margin-top:14px;line-height:1.5;
+}
+.cta small{display:block;font-size:11.5px;font-weight:600;opacity:.85;margin-top:2px}
+.cta.line{background:var(--line-green)}
+.cta.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+
+/* ── 図（6つから3つ） ── */
+.pickbox{background:#fff;border:1px solid var(--line);border-radius:6px;padding:16px;margin-top:12px}
+.pickbox .t{font-size:12.5px;font-weight:800;color:var(--navy);margin-bottom:10px}
+.menu6{display:flex;flex-wrap:wrap;gap:6px}
+.menu6 span{
+  font-size:12.5px;font-weight:700;color:var(--navy);background:#f4f6fa;
+  border:1px solid var(--line);border-radius:3px;padding:6px 10px;
+}
